@@ -1,0 +1,89 @@
+{
+  "name": "performance-flow",
+  "original_weak_prompt": "make the search path faster without risky changes",
+  "chosen_category": "bugfix",
+  "optimize_command": "vokuprompt optimize --category bugfix",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Do not modify unrelated [SCOPE_ELEMENTS].\n\nExecution:\n- Work step by step over [UNIT] and continue until [DONE_CONDITION].\n\nValidation:\n- Run verification with [VALIDATION] and show raw output.\n\nReview:\n- Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "step_loop"
+      ]
+    },
+    {
+      "name": "SCOPE_ELEMENTS",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "scope_containment"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "double_check"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "UNIT",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "step_loop"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "verification_prompt"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "CONTEXT_TARGET": "the search endpoint hot path, query preparation, and the benchmark that captures the regression",
+    "DONE_CONDITION": "the targeted search benchmark shows the intended latency improvement and go test ./... -v still passes",
+    "SCOPE_ELEMENTS": "public API response fields, unrelated handlers, storage migrations, and non-search workflows",
+    "STABLE_INTERFACE": "the existing search response schema, categories and optimize CLI behavior, and deterministic prompt rendering",
+    "TASK": "Fix the search-path performance regression with the smallest safe change and prove the gain with verification.",
+    "UNIT": "one measured hotspot or benchmark-backed micro-change at a time",
+    "VALIDATION": "go test ./... -v && go test ./... -run Search -bench Search -benchmem"
+  },
+  "final_executable_prompt": "Goal:\nFix the search-path performance regression with the smallest safe change and prove the gain with verification.\n\nContext:\nthe search endpoint hot path, query preparation, and the benchmark that captures the regression\n\nConstraints:\n- Do not modify unrelated public API response fields, unrelated handlers, storage migrations, and non-search workflows.\n\nExecution:\n- Work step by step over one measured hotspot or benchmark-backed micro-change at a time and continue until the targeted search benchmark shows the intended latency improvement and go test ./... -v still passes.\n\nValidation:\n- Run verification with go test ./... -v && go test ./... -run Search -bench Search -benchmem and show raw output.\n\nReview:\n- Double-check the minimal patch and validate the existing search response schema, categories and optimize CLI behavior, and deterministic prompt rendering remains unchanged.\n\nAnalyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+}

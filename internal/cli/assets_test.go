@@ -13,11 +13,13 @@ import (
 )
 
 type placeholderRegistryEntry struct {
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Examples    []string `json:"examples"`
-	Required    bool     `json:"required"`
-	Resolution  string   `json:"resolution"`
+	Name             string   `json:"name"`
+	Description      string   `json:"description"`
+	Examples         []string `json:"examples"`
+	Required         bool     `json:"required"`
+	Resolution       string   `json:"resolution"`
+	ExpectedFormat   string   `json:"expected_format"`
+	PreferredSources []string `json:"preferred_sources"`
 }
 
 func repoRoot(t *testing.T) string {
@@ -59,6 +61,12 @@ func TestPlaceholderRegistry_MatchesPatternPlaceholders(t *testing.T) {
 		}
 		if entry.Resolution == "" {
 			t.Fatalf("placeholder %q missing resolution guidance", entry.Name)
+		}
+		if entry.ExpectedFormat == "" {
+			t.Fatalf("placeholder %q missing expected_format", entry.Name)
+		}
+		if len(entry.PreferredSources) == 0 {
+			t.Fatalf("placeholder %q missing preferred_sources", entry.Name)
 		}
 		if !entry.Required {
 			t.Fatalf("placeholder %q should be marked required when emitted", entry.Name)

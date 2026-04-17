@@ -7,7 +7,13 @@
       "the flaky integration test around user sync"
     ],
     "required": true,
-    "resolution": "Fill this with the most specific target you can infer from the user request and current repository context."
+    "resolution": "Fill this with the most specific target you can infer from the user request and current repository context.",
+    "expected_format": "a short noun phrase naming the exact files, subsystem, runtime path, or failing surface being changed",
+    "preferred_sources": [
+      "user_request",
+      "current_repo_context",
+      "current_failure_or_task_scope"
+    ]
   },
   {
     "name": "DONE_CONDITION",
@@ -17,7 +23,13 @@
       "the compiler builds, the new contract test passes, and no unrelated files changed"
     ],
     "required": true,
-    "resolution": "State a concrete, verifiable definition of done tied to tests, build success, or the requested deliverable."
+    "resolution": "State a concrete, verifiable definition of done tied to tests, build success, or the requested deliverable.",
+    "expected_format": "one sentence with observable exit criteria and at least one verification signal",
+    "preferred_sources": [
+      "requested_success_criteria",
+      "planned_validation_commands",
+      "repository_constraints"
+    ]
   },
   {
     "name": "SCOPE_ELEMENTS",
@@ -27,7 +39,13 @@
       "the stable compiler pipeline outside the bugfix path"
     ],
     "required": true,
-    "resolution": "List the boundaries the agent must preserve based on the request, repository rules, and stable interfaces."
+    "resolution": "List the boundaries the agent must preserve based on the request, repository rules, and stable interfaces.",
+    "expected_format": "a comma-separated list of files, behaviors, interfaces, or subsystems that must stay unchanged",
+    "preferred_sources": [
+      "task_constraints",
+      "stable_interfaces",
+      "repository_rules"
+    ]
   },
   {
     "name": "STABLE_INTERFACE",
@@ -37,7 +55,13 @@
       "the existing categories and optimize command flags"
     ],
     "required": true,
-    "resolution": "Name the interface or contract reviewers should verify did not drift while implementing the task."
+    "resolution": "Name the interface or contract reviewers should verify did not drift while implementing the task.",
+    "expected_format": "one sentence naming the contract, API, output shape, or workflow that must not drift",
+    "preferred_sources": [
+      "existing_cli_contract",
+      "existing_tested_behavior",
+      "user_constraints"
+    ]
   },
   {
     "name": "TASK",
@@ -47,7 +71,13 @@
       "Add agent-facing docs for vokuprompt without changing core selection logic."
     ],
     "required": true,
-    "resolution": "Restate the user's request as a precise execution goal, preserving constraints and success criteria."
+    "resolution": "Restate the user's request as a precise execution goal, preserving constraints and success criteria.",
+    "expected_format": "one imperative sentence starting with a verb and ending with the concrete deliverable or fix",
+    "preferred_sources": [
+      "user_request",
+      "explicit_acceptance_criteria",
+      "current_repo_context"
+    ]
   },
   {
     "name": "UNIT",
@@ -57,7 +87,13 @@
       "one contract file or one CLI behavior at a time"
     ],
     "required": true,
-    "resolution": "Choose a deterministic work unit that keeps the task incremental and easy to validate."
+    "resolution": "Choose a deterministic work unit that keeps the task incremental and easy to validate.",
+    "expected_format": "a short phrase describing one deterministic work chunk that can be completed and checked before moving on",
+    "preferred_sources": [
+      "current_failure_breakdown",
+      "minimal_patch_strategy",
+      "planned_validation_commands"
+    ]
   },
   {
     "name": "VALIDATION",
@@ -67,6 +103,12 @@
       "npm test -- optimize-contract"
     ],
     "required": true,
-    "resolution": "Provide the real build, test, or lint command that proves the change worked in the current repository."
+    "resolution": "Provide the real build, test, or lint command that proves the change worked in the current repository.",
+    "expected_format": "a runnable shell command or short command chain copied exactly as it should be executed",
+    "preferred_sources": [
+      "existing_repo_tests",
+      "existing_repo_build_commands",
+      "task_specific_verification_needs"
+    ]
   }
 ]
