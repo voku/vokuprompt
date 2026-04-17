@@ -1,0 +1,58 @@
+name: Build Artifact
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/build.yml
+      - cmd/**
+      - internal/**
+      - categories.json
+      - patterns.json
+      - placeholders.json
+      - skills/vokuprompt/SKILL.md
+      - go.mod
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build installable vokuprompt bundle
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build Linux bundle
+        run: |
+          set -euo pipefail
+
+          bundle_dir="dist/vokuprompt-linux-amd64"
+          mkdir -p "${bundle_dir}/skills/vokuprompt"
+
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o "${bundle_dir}/vokuprompt" ./cmd/vokuprompt
+
+          cp categories.json "${bundle_dir}/categories.json"
+          cp patterns.json "${bundle_dir}/patterns.json"
+          cp placeholders.json "${bundle_dir}/placeholders.json"
+          cp skills/vokuprompt/SKILL.md "${bundle_dir}/skills/vokuprompt/SKILL.md"
+
+          tar -C dist -czf dist/vokuprompt-linux-amd64.tar.gz vokuprompt-linux-amd64
+          sha256sum dist/vokuprompt-linux-amd64.tar.gz > dist/vokuprompt-linux-amd64.tar.gz.sha256
+
+      - name: Upload installable bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: vokuprompt-linux-amd64
+          path: |
+            dist/vokuprompt-linux-amd64.tar.gz
+            dist/vokuprompt-linux-amd64.tar.gz.sha256
+          retention-days: 90
