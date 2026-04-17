@@ -93,7 +93,7 @@ Example output shape:
       "source_patterns": ["goal_context_constraints_done"]
     }
   ],
-  "execution_request": "Use the selected category as the deterministic task frame.\n1. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.\n2. Keep the selected category and compiled structure intact; do not silently rewrite the contract.\n3. If a required placeholder cannot be resolved safely, stop and ask for the missing input.\n4. After placeholder resolution, execute the final prompt.\n\nReturn:\n1. category confirmation\n2. placeholder resolution summary\n3. final executable prompt\n4. execution result"
+  "execution_request": "Treat the selected category as fixed input chosen from the deterministic category registry.\n1. Use placeholder_manifest as the source of truth for which placeholders must be resolved now.\n2. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.\n3. Keep the selected category and compiled structure intact; do not silently rewrite the contract.\n4. If a required placeholder cannot be resolved safely, stop and ask for the missing input.\n5. After placeholder resolution, execute the final prompt.\n\nReturn:\n1. category confirmation\n2. placeholder resolution summary\n3. final executable prompt\n4. execution result"
 }
 ```
 

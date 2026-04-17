@@ -130,8 +130,8 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 				t.Fatalf("final_agent_handoff still contains unresolved placeholders: %s", finalPrompt)
 			}
 			lowerRequest := strings.ToLower(resp.ExecutionRequest)
-			if !strings.Contains(lowerRequest, "selected category") || !strings.Contains(lowerRequest, "final executable prompt") || !strings.Contains(lowerRequest, "execute the final prompt") {
-				t.Fatalf("execution_request must instruct category framing + final prompt build + execute, got %q", resp.ExecutionRequest)
+			if !strings.Contains(lowerRequest, "deterministic category registry") || !strings.Contains(lowerRequest, "placeholder_manifest") || !strings.Contains(lowerRequest, "final executable prompt") || !strings.Contains(lowerRequest, "execute the final prompt") {
+				t.Fatalf("execution_request must instruct deterministic category framing + manifest-driven prompt build + execute, got %q", resp.ExecutionRequest)
 			}
 		})
 	}

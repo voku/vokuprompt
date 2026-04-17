@@ -99,11 +99,12 @@ Validation:
 Review:
 - Double-check the minimal patch and verify the existing categories, optimize flags, and compiler selection behavior remain unchanged.
 
-Use the selected category as the deterministic task frame.
-1. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.
-2. Keep the selected category and compiled structure intact; do not silently rewrite the contract.
-3. If a required placeholder cannot be resolved safely, stop and ask for the missing input.
-4. After placeholder resolution, execute the final prompt.
+Treat the selected category as fixed input chosen from the deterministic category registry.
+1. Use placeholder_manifest as the source of truth for which placeholders must be resolved now.
+2. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.
+3. Keep the selected category and compiled structure intact; do not silently rewrite the contract.
+4. If a required placeholder cannot be resolved safely, stop and ask for the missing input.
+5. After placeholder resolution, execute the final prompt.
 
 Return:
 1. category confirmation
@@ -182,11 +183,12 @@ Validation:
 Review:
 - Confirm the reported speedup comes from the dominant workload and that the existing search response schema, optimize CLI contract, and deterministic prompt rendering remains unchanged.
 
-Use the selected category as the deterministic task frame.
-1. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.
-2. Keep the selected category and compiled structure intact; do not silently rewrite the contract.
-3. If a required placeholder cannot be resolved safely, stop and ask for the missing input.
-4. After placeholder resolution, execute the final prompt.
+Treat the selected category as fixed input chosen from the deterministic category registry.
+1. Use placeholder_manifest as the source of truth for which placeholders must be resolved now.
+2. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.
+3. Keep the selected category and compiled structure intact; do not silently rewrite the contract.
+4. If a required placeholder cannot be resolved safely, stop and ask for the missing input.
+5. After placeholder resolution, execute the final prompt.
 
 Return:
 1. category confirmation
