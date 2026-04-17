@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"slices"
 	"strings"
@@ -70,7 +71,7 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 			if example.ReturnedCompiledPrompt != resp.CompiledPrompt {
 				t.Fatalf("returned_compiled_prompt mismatch\ngot:\n%s\nwant:\n%s", example.ReturnedCompiledPrompt, resp.CompiledPrompt)
 			}
-			if !slices.Equal(example.PlaceholderManifestExcer, resp.PlaceholderManifest) {
+			if !reflect.DeepEqual(example.PlaceholderManifestExcer, resp.PlaceholderManifest) {
 				t.Fatalf("placeholder_manifest_excerpt mismatch\ngot:  %+v\nwant: %+v", example.PlaceholderManifestExcer, resp.PlaceholderManifest)
 			}
 
