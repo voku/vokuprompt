@@ -10,6 +10,8 @@ import (
 	"github.com/voku/vokuprompt/internal/output"
 )
 
+const executionRequest = "Analyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+
 func ExecuteOptimize(args []string, out io.Writer) error {
 	fs := flag.NewFlagSet("optimize", flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
@@ -51,5 +53,6 @@ func ExecuteOptimize(args []string, out io.Writer) error {
 		SelectedPatterns:    selectedNames,
 		CompiledPrompt:      compiledPrompt,
 		PlaceholderManifest: manifest,
+		ExecutionRequest:    executionRequest,
 	})
 }

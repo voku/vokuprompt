@@ -13,6 +13,7 @@ type OptimizeResponse struct {
 	SelectedPatterns    []string                       `json:"selected_patterns"`
 	CompiledPrompt      string                         `json:"compiled_prompt"`
 	PlaceholderManifest []ast.PlaceholderManifestEntry `json:"placeholder_manifest"`
+	ExecutionRequest    string                         `json:"execution_request"`
 }
 
 func WriteJSON(w io.Writer, value any) error {

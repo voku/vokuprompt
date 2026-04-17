@@ -71,33 +71,51 @@ func TestExecuteOptimize_ProducesCorrectContract(t *testing.T) {
 		t.Fatalf("invalid JSON: %v\noutput: %s", err, out.String())
 	}
 
-	if resp.Category != "bugfix" {
-		t.Errorf("category = %q, want bugfix", resp.Category)
-	}
-
-	wantPatterns := []string{"goal", "scope", "verify"}
-	if len(resp.SelectedPatterns) != len(wantPatterns) {
-		t.Fatalf("selected_patterns = %v, want %v", resp.SelectedPatterns, wantPatterns)
-	}
-	for i, name := range wantPatterns {
-		if resp.SelectedPatterns[i] != name {
-			t.Errorf("selected_patterns[%d] = %q, want %q", i, resp.SelectedPatterns[i], name)
-		}
-	}
-
-	const wantPrompt = "Goal:\n[TASK]\n\nConstraints:\n- Do not modify [SCOPE].\n\nValidation:\n- Run [VALIDATION]."
-	if resp.CompiledPrompt != wantPrompt {
-		t.Fatalf("compiled_prompt:\ngot:  %q\nwant: %q", resp.CompiledPrompt, wantPrompt)
-	}
-
-	if len(resp.PlaceholderManifest) != 3 {
-		t.Fatalf("placeholder_manifest len = %d, want 3", len(resp.PlaceholderManifest))
-	}
-	// Must be sorted: SCOPE, TASK, VALIDATION
-	for i, want := range []string{"SCOPE", "TASK", "VALIDATION"} {
-		if resp.PlaceholderManifest[i].Name != want {
-			t.Errorf("manifest[%d] = %q, want %q", i, resp.PlaceholderManifest[i].Name, want)
-		}
+	const want = `{
+  "category": "bugfix",
+  "selected_patterns": [
+    "goal",
+    "scope",
+    "verify"
+  ],
+  "compiled_prompt": "Goal:\n[TASK]\n\nConstraints:\n- Do not modify [SCOPE].\n\nValidation:\n- Run [VALIDATION].",
+  "placeholder_manifest": [
+    {
+      "name": "SCOPE",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "scope"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "verify"
+      ]
+    }
+  ],
+  "execution_request": "Analyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+}
+`
+	if out.String() != want {
+		t.Fatalf("optimize JSON contract mismatch\ngot:\n%s\nwant:\n%s", out.String(), want)
 	}
 }
 
@@ -121,5 +139,28 @@ func TestExecuteCategories_ListsAll(t *testing.T) {
 	}
 	if len(resp.Categories) != 1 || resp.Categories[0].Name != "bugfix" {
 		t.Fatalf("categories = %+v, want [{bugfix ...}]", resp.Categories)
+	}
+}
+
+func TestExecuteCategories_JSONSnapshot(t *testing.T) {
+	dir := t.TempDir()
+	cp := writeTemp(t, dir, "categories.json", testCategories)
+
+	var out bytes.Buffer
+	if err := ExecuteCategories([]string{"--categories", cp}, &out); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	const want = `{
+  "categories": [
+    {
+      "name": "bugfix",
+      "description": "Fix a bug with minimal patch."
+    }
+  ]
+}
+`
+	if out.String() != want {
+		t.Fatalf("categories JSON contract mismatch\ngot:\n%s\nwant:\n%s", out.String(), want)
 	}
 }

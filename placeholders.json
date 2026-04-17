@@ -1,0 +1,72 @@
+[
+  {
+    "name": "CONTEXT_TARGET",
+    "description": "The concrete codebase area, subsystem, file set, or runtime context that frames the task.",
+    "examples": [
+      "the request router in internal/http",
+      "the flaky integration test around user sync"
+    ],
+    "required": true,
+    "resolution": "Fill this with the most specific target you can infer from the user request and current repository context."
+  },
+  {
+    "name": "DONE_CONDITION",
+    "description": "The explicit stopping condition for the work loop.",
+    "examples": [
+      "all targeted tests pass and the failing nil-path is covered",
+      "the compiler builds, the new contract test passes, and no unrelated files changed"
+    ],
+    "required": true,
+    "resolution": "State a concrete, verifiable definition of done tied to tests, build success, or the requested deliverable."
+  },
+  {
+    "name": "SCOPE_ELEMENTS",
+    "description": "The code, behavior, files, or interfaces that must not be changed while solving the task.",
+    "examples": [
+      "unrelated packages, generated files, and public CLI flags",
+      "the stable compiler pipeline outside the bugfix path"
+    ],
+    "required": true,
+    "resolution": "List the boundaries the agent must preserve based on the request, repository rules, and stable interfaces."
+  },
+  {
+    "name": "STABLE_INTERFACE",
+    "description": "The API, contract, output shape, or workflow that must remain stable after the change.",
+    "examples": [
+      "the optimize JSON response fields consumed by agents",
+      "the existing categories and optimize command flags"
+    ],
+    "required": true,
+    "resolution": "Name the interface or contract reviewers should verify did not drift while implementing the task."
+  },
+  {
+    "name": "TASK",
+    "description": "The primary task statement the agent should solve.",
+    "examples": [
+      "Fix the nil dereference in the optimizer and prove the fix with tests.",
+      "Add agent-facing docs for vokuprompt without changing core selection logic."
+    ],
+    "required": true,
+    "resolution": "Restate the user's request as a precise execution goal, preserving constraints and success criteria."
+  },
+  {
+    "name": "UNIT",
+    "description": "The smallest useful work unit the agent should iterate over.",
+    "examples": [
+      "one failing test, then the minimal patch, then validation",
+      "one contract file or one CLI behavior at a time"
+    ],
+    "required": true,
+    "resolution": "Choose a deterministic work unit that keeps the task incremental and easy to validate."
+  },
+  {
+    "name": "VALIDATION",
+    "description": "The exact verification command or proof the agent must run and report.",
+    "examples": [
+      "go test ./... -v",
+      "npm test -- optimize-contract"
+    ],
+    "required": true,
+    "resolution": "Provide the real build, test, or lint command that proves the change worked in the current repository."
+  }
+]
