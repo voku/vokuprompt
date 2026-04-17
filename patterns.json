@@ -1,0 +1,212 @@
+[
+  {
+    "name": "goal_context_constraints_done",
+    "role": "framing",
+    "description": "Define goal and context placeholders.",
+    "prompt": "[TASK]\n\nContext:\n[CONTEXT_TARGET]",
+    "placeholders": ["TASK", "CONTEXT_TARGET"],
+    "weights": {
+      "bugfix": 1.0,
+      "performance": 1.0,
+      "refactor": 1.0,
+      "review": 1.0,
+      "tests": 1.0
+    }
+  },
+  {
+    "name": "verification_prompt",
+    "role": "validation",
+    "description": "Require runnable verification command.",
+    "prompt": "Run [VALIDATION] and show raw output.",
+    "placeholders": ["VALIDATION"],
+    "weights": {
+      "bugfix": 0.9,
+      "performance": 0.3,
+      "refactor": 0.8,
+      "review": 0.8,
+      "tests": 0.2
+    }
+  },
+  {
+    "name": "step_loop",
+    "role": "execution",
+    "description": "Execute in deterministic steps until done.",
+    "prompt": "Work step by step over [UNIT] and continue until [DONE_CONDITION].",
+    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "weights": {
+      "bugfix": 0.85,
+      "performance": 0.2,
+      "refactor": 0.2,
+      "review": 0.1,
+      "tests": 0.2
+    }
+  },
+  {
+    "name": "double_check",
+    "role": "review",
+    "description": "Require explicit self-review.",
+    "prompt": "Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.",
+    "placeholders": ["STABLE_INTERFACE"],
+    "weights": {
+      "bugfix": 0.6,
+      "performance": 0.2,
+      "refactor": 0.2,
+      "review": 0.2,
+      "tests": 0.2
+    }
+  },
+  {
+    "name": "scope_containment",
+    "role": "constraint",
+    "description": "Keep scope narrow and explicit.",
+    "prompt": "Do not modify unrelated [SCOPE_ELEMENTS].",
+    "placeholders": ["SCOPE_ELEMENTS"],
+    "weights": {
+      "bugfix": 0.8,
+      "performance": 0.2,
+      "refactor": 0.2,
+      "review": 0.8,
+      "tests": 0.3
+    }
+  },
+  {
+    "name": "performance_scope",
+    "role": "constraint",
+    "description": "Require realistic performance claims and narrow scope.",
+    "prompt": "Do not claim a speedup without realistic dominant-workload evidence, and do not modify unrelated [SCOPE_ELEMENTS].",
+    "placeholders": ["SCOPE_ELEMENTS"],
+    "weights": {
+      "performance": 0.95
+    }
+  },
+  {
+    "name": "performance_loop",
+    "role": "execution",
+    "description": "Drive performance work from measurement and dominant workload.",
+    "prompt": "Measure the dominant workload first, then make one benchmark-backed change over [UNIT] at a time and continue until [DONE_CONDITION].",
+    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "weights": {
+      "performance": 0.95
+    }
+  },
+  {
+    "name": "performance_validation",
+    "role": "validation",
+    "description": "Demand realistic benchmark validation.",
+    "prompt": "Run [VALIDATION] against realistic benchmarks that reflect the dominant workload and show raw output.",
+    "placeholders": ["VALIDATION"],
+    "weights": {
+      "performance": 0.98
+    }
+  },
+  {
+    "name": "performance_review",
+    "role": "review",
+    "description": "Review performance claims against stable interfaces.",
+    "prompt": "Confirm the reported speedup comes from the dominant workload and that [STABLE_INTERFACE] remains unchanged.",
+    "placeholders": ["STABLE_INTERFACE"],
+    "weights": {
+      "performance": 0.85
+    }
+  },
+  {
+    "name": "refactor_scope",
+    "role": "constraint",
+    "description": "Keep refactors contained and simplification-first.",
+    "prompt": "Prefer deletion, simplification, and safe restructuring before extension; do not modify unrelated [SCOPE_ELEMENTS].",
+    "placeholders": ["SCOPE_ELEMENTS"],
+    "weights": {
+      "refactor": 0.98
+    }
+  },
+  {
+    "name": "refactor_loop",
+    "role": "execution",
+    "description": "Drive refactors as contained simplification steps.",
+    "prompt": "Refactor one contained [UNIT] at a time, prefer deleting duplication before adding new code, and continue until [DONE_CONDITION].",
+    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "weights": {
+      "refactor": 0.98
+    }
+  },
+  {
+    "name": "refactor_review",
+    "role": "review",
+    "description": "Review safe restructuring against interface stability.",
+    "prompt": "Verify the restructure stays contained, removes redundancy before extension, and preserves [STABLE_INTERFACE].",
+    "placeholders": ["STABLE_INTERFACE"],
+    "weights": {
+      "refactor": 0.9
+    }
+  },
+  {
+    "name": "review_loop",
+    "role": "execution",
+    "description": "Review one claim or risk at a time.",
+    "prompt": "Inspect one claim, failure mode, or missing assumption in [UNIT] at a time and continue until [DONE_CONDITION].",
+    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "weights": {
+      "review": 0.85
+    }
+  },
+  {
+    "name": "review_analysis",
+    "role": "analysis",
+    "description": "Start review work from failure analysis and challenge.",
+    "prompt": "Start with failure analysis; identify what is missing, what could be wrong, and which assumptions in [CONTEXT_TARGET] need to be challenged.",
+    "placeholders": ["CONTEXT_TARGET"],
+    "weights": {
+      "review": 0.98
+    }
+  },
+  {
+    "name": "review_challenge",
+    "role": "review",
+    "description": "Force challenge-oriented review output.",
+    "prompt": "Challenge the proposed change against [STABLE_INTERFACE], call out missing evidence, and reject weak conclusions.",
+    "placeholders": ["STABLE_INTERFACE"],
+    "weights": {
+      "review": 0.98
+    }
+  },
+  {
+    "name": "tests_scope",
+    "role": "constraint",
+    "description": "Keep test-driven changes focused and production-safe.",
+    "prompt": "Keep production changes minimal and do not modify unrelated [SCOPE_ELEMENTS].",
+    "placeholders": ["SCOPE_ELEMENTS"],
+    "weights": {
+      "tests": 0.9
+    }
+  },
+  {
+    "name": "tests_loop",
+    "role": "execution",
+    "description": "Require a failing test before the fix.",
+    "prompt": "Write or isolate a failing test for [UNIT] first, then make the smallest change and continue until [DONE_CONDITION].",
+    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "weights": {
+      "tests": 0.99
+    }
+  },
+  {
+    "name": "tests_validation",
+    "role": "validation",
+    "description": "Use tests as proof.",
+    "prompt": "Use [VALIDATION] as proof, showing the failing test first and the passing result after the fix.",
+    "placeholders": ["VALIDATION"],
+    "weights": {
+      "tests": 0.99
+    }
+  },
+  {
+    "name": "tests_review",
+    "role": "review",
+    "description": "Review whether tests prove stability.",
+    "prompt": "Treat tests as proof, and confirm [STABLE_INTERFACE] remains covered by the new or updated test.",
+    "placeholders": ["STABLE_INTERFACE"],
+    "weights": {
+      "tests": 0.95
+    }
+  }
+]

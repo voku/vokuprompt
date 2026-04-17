@@ -1,0 +1,89 @@
+{
+  "name": "tests-flow",
+  "original_weak_prompt": "add tests that prove this fix really works",
+  "chosen_category": "tests",
+  "optimize_command": "vokuprompt optimize --category tests",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Keep production changes minimal and do not modify unrelated [SCOPE_ELEMENTS].\n\nExecution:\n- Write or isolate a failing test for [UNIT] first, then make the smallest change and continue until [DONE_CONDITION].\n\nValidation:\n- Use [VALIDATION] as proof, showing the failing test first and the passing result after the fix.\n\nReview:\n- Treat tests as proof, and confirm [STABLE_INTERFACE] remains covered by the new or updated test.",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "tests_loop"
+      ]
+    },
+    {
+      "name": "SCOPE_ELEMENTS",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "tests_scope"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "tests_review"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "UNIT",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "tests_loop"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "tests_validation"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "CONTEXT_TARGET": "the failing optimize contract path and the tests that prove the regression stays fixed",
+    "DONE_CONDITION": "the targeted test fails first for the intended reason, passes after the fix, and go test ./... -v passes",
+    "SCOPE_ELEMENTS": "production behavior outside the target fix, other commands, and other example fixtures",
+    "STABLE_INTERFACE": "the optimize JSON contract, placeholder manifest expectations, and current CLI output shape",
+    "TASK": "Add tests that prove the optimize fix works and keep any production change minimal.",
+    "UNIT": "one failing contract assertion or missing regression case",
+    "VALIDATION": "go test ./... -v"
+  },
+  "final_executable_prompt": "Goal:\nAdd tests that prove the optimize fix works and keep any production change minimal.\n\nContext:\nthe failing optimize contract path and the tests that prove the regression stays fixed\n\nConstraints:\n- Keep production changes minimal and do not modify unrelated production behavior outside the target fix, other commands, and other example fixtures.\n\nExecution:\n- Write or isolate a failing test for one failing contract assertion or missing regression case first, then make the smallest change and continue until the targeted test fails first for the intended reason, passes after the fix, and go test ./... -v passes.\n\nValidation:\n- Use go test ./... -v as proof, showing the failing test first and the passing result after the fix.\n\nReview:\n- Treat tests as proof, and confirm the optimize JSON contract, placeholder manifest expectations, and current CLI output shape remains covered by the new or updated test.\n\nAnalyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+}

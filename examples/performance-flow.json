@@ -1,0 +1,89 @@
+{
+  "name": "performance-flow",
+  "original_weak_prompt": "make the search path faster without risky changes",
+  "chosen_category": "performance",
+  "optimize_command": "vokuprompt optimize --category performance",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Do not claim a speedup without realistic dominant-workload evidence, and do not modify unrelated [SCOPE_ELEMENTS].\n\nExecution:\n- Measure the dominant workload first, then make one benchmark-backed change over [UNIT] at a time and continue until [DONE_CONDITION].\n\nValidation:\n- Run [VALIDATION] against realistic benchmarks that reflect the dominant workload and show raw output.\n\nReview:\n- Confirm the reported speedup comes from the dominant workload and that [STABLE_INTERFACE] remains unchanged.",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "performance_loop"
+      ]
+    },
+    {
+      "name": "SCOPE_ELEMENTS",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "performance_scope"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "performance_review"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "UNIT",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "performance_loop"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "performance_validation"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "CONTEXT_TARGET": "the search endpoint hot path, query preparation, and the benchmark that captures the regression",
+    "DONE_CONDITION": "the targeted search benchmark shows the intended latency improvement under the dominant workload and go test ./... -v still passes",
+    "SCOPE_ELEMENTS": "public API response fields, unrelated handlers, storage migrations, and non-search workflows",
+    "STABLE_INTERFACE": "the existing search response schema, optimize CLI contract, and deterministic prompt rendering",
+    "TASK": "Fix the search-path performance regression with the smallest safe change and prove the gain with realistic benchmarks.",
+    "UNIT": "one measured hotspot or benchmark-backed micro-change",
+    "VALIDATION": "go test ./... -v && go test ./... -run Search -bench Search -benchmem"
+  },
+  "final_executable_prompt": "Goal:\nFix the search-path performance regression with the smallest safe change and prove the gain with realistic benchmarks.\n\nContext:\nthe search endpoint hot path, query preparation, and the benchmark that captures the regression\n\nConstraints:\n- Do not claim a speedup without realistic dominant-workload evidence, and do not modify unrelated public API response fields, unrelated handlers, storage migrations, and non-search workflows.\n\nExecution:\n- Measure the dominant workload first, then make one benchmark-backed change over one measured hotspot or benchmark-backed micro-change at a time and continue until the targeted search benchmark shows the intended latency improvement under the dominant workload and go test ./... -v still passes.\n\nValidation:\n- Run go test ./... -v && go test ./... -run Search -bench Search -benchmem against realistic benchmarks that reflect the dominant workload and show raw output.\n\nReview:\n- Confirm the reported speedup comes from the dominant workload and that the existing search response schema, optimize CLI contract, and deterministic prompt rendering remains unchanged.\n\nAnalyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+}

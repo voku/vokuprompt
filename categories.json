@@ -1,0 +1,150 @@
+[
+  {
+    "name": "bugfix",
+    "description": "Fix a bug with minimal patch and explicit proof.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "validation": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "verification_prompt",
+      "step_loop",
+      "double_check",
+      "scope_containment"
+    ],
+    "focus": [
+      "minimal patch",
+      "explicit verification"
+    ]
+  },
+  {
+    "name": "performance",
+    "description": "Improve speed with dominant-workload realism and benchmark proof.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "validation": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "scope_containment",
+      "performance_scope",
+      "step_loop",
+      "performance_loop",
+      "verification_prompt",
+      "performance_validation",
+      "double_check",
+      "performance_review"
+    ],
+    "focus": [
+      "dominant workload",
+      "benchmark realism"
+    ]
+  },
+  {
+    "name": "refactor",
+    "description": "Restructure safely with containment, simplification, and interface stability.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "validation": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "scope_containment",
+      "refactor_scope",
+      "step_loop",
+      "refactor_loop",
+      "verification_prompt",
+      "double_check",
+      "refactor_review"
+    ],
+    "focus": [
+      "containment",
+      "deletion before extension"
+    ]
+  },
+  {
+    "name": "review",
+    "description": "Critically analyze a change, challenge assumptions, and surface missing evidence.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "validation": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "scope_containment",
+      "review_loop",
+      "verification_prompt",
+      "double_check",
+      "review_analysis",
+      "review_challenge"
+    ],
+    "focus": [
+      "failure analysis",
+      "missing evidence"
+    ]
+  },
+  {
+    "name": "tests",
+    "description": "Drive the task with a failing test first and use tests as proof.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "validation": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "scope_containment",
+      "tests_scope",
+      "step_loop",
+      "tests_loop",
+      "verification_prompt",
+      "tests_validation",
+      "double_check",
+      "tests_review"
+    ],
+    "focus": [
+      "failing test first",
+      "tests as proof"
+    ]
+  }
+]
