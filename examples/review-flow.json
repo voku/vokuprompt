@@ -1,0 +1,91 @@
+{
+  "name": "review-flow",
+  "original_weak_prompt": "review this proposed fix and tell me if it is solid",
+  "chosen_category": "review",
+  "optimize_command": "vokuprompt optimize --category review",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Do not modify unrelated [SCOPE_ELEMENTS].\n\nExecution:\n- Inspect one claim, failure mode, or missing assumption in [UNIT] at a time and continue until [DONE_CONDITION].\n\nValidation:\n- Run verification with [VALIDATION] and show raw output.\n\nAnalysis:\n- Start with failure analysis; identify what is missing, what could be wrong, and which assumptions in [CONTEXT_TARGET] need to be challenged.\n\nReview:\n- Challenge the proposed change against [STABLE_INTERFACE], call out missing evidence, and reject weak conclusions.",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Analysis",
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done",
+        "review_analysis"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "review_loop"
+      ]
+    },
+    {
+      "name": "SCOPE_ELEMENTS",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "scope_containment"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "review_challenge"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "UNIT",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "review_loop"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "verification_prompt"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "CONTEXT_TARGET": "the proposed optimize output change, its tests, and the assumptions behind the patch",
+    "DONE_CONDITION": "each critical claim has supporting evidence, weak conclusions are called out explicitly, and go test ./... -v still passes",
+    "SCOPE_ELEMENTS": "commands, placeholder resolution rules, and code paths outside the reviewed change",
+    "STABLE_INTERFACE": "the optimize JSON contract, current CLI behavior, and downstream prompt shape guarantees",
+    "TASK": "Critically review the proposed optimize change and decide whether the evidence is strong enough to accept it.",
+    "UNIT": "the proposed fix",
+    "VALIDATION": "go test ./... -v"
+  },
+  "final_executable_prompt": "Goal:\nCritically review the proposed optimize change and decide whether the evidence is strong enough to accept it.\n\nContext:\nthe proposed optimize output change, its tests, and the assumptions behind the patch\n\nConstraints:\n- Do not modify unrelated commands, placeholder resolution rules, and code paths outside the reviewed change.\n\nExecution:\n- Inspect one claim, failure mode, or missing assumption in the proposed fix at a time and continue until each critical claim has supporting evidence, weak conclusions are called out explicitly, and go test ./... -v still passes.\n\nValidation:\n- Run verification with go test ./... -v and show raw output.\n\nAnalysis:\n- Start with failure analysis; identify what is missing, what could be wrong, and which assumptions in the proposed optimize output change, its tests, and the assumptions behind the patch need to be challenged.\n\nReview:\n- Challenge the proposed change against the optimize JSON contract, current CLI behavior, and downstream prompt shape guarantees, call out missing evidence, and reject weak conclusions.\n\nAnalyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+}

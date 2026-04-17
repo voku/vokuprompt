@@ -6,6 +6,11 @@ Use `vokuprompt` to turn a weak task request into a compiled execution prompt fo
 
 1. Run `vokuprompt categories` to see available categories.
 2. Choose the best category for the task.
+   - `bugfix` for minimal patches with explicit verification.
+   - `performance` for dominant-workload measurement and benchmark-backed speedups.
+   - `refactor` for safe restructuring, containment, and deletion-before-extension.
+   - `review` for failure analysis, missing evidence, and challenge-oriented critique.
+   - `tests` for failing-test-first work where tests are the proof.
 3. Run `vokuprompt optimize --category bugfix` (or another listed category).
 4. Inspect the returned `compiled_prompt` and `placeholder_manifest`.
 5. Resolve each placeholder with current task context plus `placeholders.json` from the repository root.
@@ -105,53 +110,71 @@ Return:
 
 ### Original weak prompt
 
-`add agent docs so people know how to use this tool`
+`make the search path faster without risky changes`
 
 ### Chosen category
 
-`bugfix` (the current shipped category for minimal, reviewable repo changes)
+`performance`
 
 ### Command invocation
 
 ```bash
 vokuprompt categories
-vokuprompt optimize --category bugfix
+vokuprompt optimize --category performance
 ```
 
 ### Returned compiled prompt
 
-Use the same `compiled_prompt` and `placeholder_manifest` shape returned by `vokuprompt optimize`.
+```text
+Goal:
+[TASK]
+
+Context:
+[CONTEXT_TARGET]
+
+Constraints:
+- Do not claim a speedup without realistic dominant-workload evidence, and do not modify unrelated [SCOPE_ELEMENTS].
+
+Execution:
+- Measure the dominant workload first, then make one benchmark-backed change over [UNIT] at a time and continue until [DONE_CONDITION].
+
+Validation:
+- Run [VALIDATION] against realistic benchmarks that reflect the dominant workload and show raw output.
+
+Review:
+- Confirm the reported speedup comes from the dominant workload and that [STABLE_INTERFACE] remains unchanged.
+```
 
 ### Placeholder resolution
 
-- `[TASK]` → Add agent-facing docs, a placeholder registry, and examples without redesigning the compiler.
-- `[CONTEXT_TARGET]` → `skills/vokuprompt/SKILL.md`, `placeholders.json`, and optimize response docs/tests.
-- `[SCOPE_ELEMENTS]` → core compiler logic, category selection behavior, and unrelated repository files.
-- `[UNIT]` → one agent-facing file or contract test at a time.
-- `[DONE_CONDITION]` → the skill doc matches the CLI, placeholders are documented, and all tests pass.
-- `[VALIDATION]` → `go test ./... -v`
-- `[STABLE_INTERFACE]` → the existing CLI behavior, selected pattern ordering, and compiled prompt format.
+- `[TASK]` → Fix the search-path performance regression with the smallest safe change and prove the gain with realistic benchmarks.
+- `[CONTEXT_TARGET]` → the search endpoint hot path, query preparation, and the benchmark that captures the regression.
+- `[SCOPE_ELEMENTS]` → public API response fields, unrelated handlers, storage migrations, and non-search workflows.
+- `[UNIT]` → one measured hotspot or benchmark-backed micro-change.
+- `[DONE_CONDITION]` → the targeted search benchmark shows the intended latency improvement under the dominant workload and `go test ./... -v` still passes.
+- `[VALIDATION]` → `go test ./... -v && go test ./... -run Search -bench Search -benchmem`
+- `[STABLE_INTERFACE]` → the existing search response schema, optimize CLI contract, and deterministic prompt rendering.
 
 ### Final executed prompt
 
 ```text
 Goal:
-Add agent-facing docs, a placeholder registry, and examples without redesigning the compiler.
+Fix the search-path performance regression with the smallest safe change and prove the gain with realistic benchmarks.
 
 Context:
-skills/vokuprompt/SKILL.md, placeholders.json, and optimize response docs/tests.
+the search endpoint hot path, query preparation, and the benchmark that captures the regression.
 
 Constraints:
-- Do not modify core compiler logic, category selection behavior, or unrelated repository files.
+- Do not claim a speedup without realistic dominant-workload evidence, and do not modify unrelated public API response fields, unrelated handlers, storage migrations, and non-search workflows.
 
 Execution:
-- Work step by step over one agent-facing file or contract test at a time and continue until the skill doc matches the CLI, placeholders are documented, and all tests pass.
+- Measure the dominant workload first, then make one benchmark-backed change over one measured hotspot or benchmark-backed micro-change at a time and continue until the targeted search benchmark shows the intended latency improvement under the dominant workload and go test ./... -v still passes.
 
 Validation:
-- Run verification with go test ./... -v and show raw output.
+- Run go test ./... -v && go test ./... -run Search -bench Search -benchmem against realistic benchmarks that reflect the dominant workload and show raw output.
 
 Review:
-- Double-check the minimal patch and validate the existing CLI behavior, selected pattern ordering, and compiled prompt format remains unchanged.
+- Confirm the reported speedup comes from the dominant workload and that the existing search response schema, optimize CLI contract, and deterministic prompt rendering remains unchanged.
 
 Analyze the original prompt, improve it, and execute the improved prompt now.
 

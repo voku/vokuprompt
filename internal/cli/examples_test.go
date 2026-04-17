@@ -44,7 +44,32 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 	}
 	slices.Sort(registryNames)
 
-	for _, name := range []string{"bugfix-flow.json", "performance-flow.json"} {
+	entries, err := os.ReadDir(filepath.Join(root, "examples"))
+	if err != nil {
+		t.Fatalf("read examples directory: %v", err)
+	}
+
+	names := make([]string, 0, len(entries))
+	for _, entry := range entries {
+		if entry.IsDir() || filepath.Ext(entry.Name()) != ".json" {
+			continue
+		}
+		names = append(names, entry.Name())
+	}
+	slices.Sort(names)
+
+	wantNames := []string{
+		"bugfix-flow.json",
+		"performance-flow.json",
+		"refactor-flow.json",
+		"review-flow.json",
+		"tests-flow.json",
+	}
+	if !slices.Equal(names, wantNames) {
+		t.Fatalf("example fixtures = %v, want %v", names, wantNames)
+	}
+
+	for _, name := range names {
 		t.Run(name, func(t *testing.T) {
 			example := loadExampleFixture(t, filepath.Join(root, "examples", name))
 

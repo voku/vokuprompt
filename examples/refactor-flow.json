@@ -1,0 +1,89 @@
+{
+  "name": "refactor-flow",
+  "original_weak_prompt": "clean up this parser without changing behavior",
+  "chosen_category": "refactor",
+  "optimize_command": "vokuprompt optimize --category refactor",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Prefer deletion, simplification, and safe restructuring before extension; do not modify unrelated [SCOPE_ELEMENTS].\n\nExecution:\n- Refactor one contained [UNIT] at a time, prefer deleting duplication before adding new code, and continue until [DONE_CONDITION].\n\nValidation:\n- Run verification with [VALIDATION] and show raw output.\n\nReview:\n- Verify the restructure stays contained, removes redundancy before extension, and preserves [STABLE_INTERFACE].",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "refactor_loop"
+      ]
+    },
+    {
+      "name": "SCOPE_ELEMENTS",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "refactor_scope"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "refactor_review"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "UNIT",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "refactor_loop"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "verification_prompt"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "CONTEXT_TARGET": "the parser pipeline in internal/ast plus the normalization helpers it depends on",
+    "DONE_CONDITION": "the parser flow is simpler, no behavior changes leak outside the target area, and go test ./... -v passes",
+    "SCOPE_ELEMENTS": "public CLI flags, placeholder registry semantics, unrelated packages, and output contract fields",
+    "STABLE_INTERFACE": "the optimize JSON response shape, placeholder manifest semantics, and current compiler behavior",
+    "TASK": "Refactor the parser path for clarity and duplication removal without changing behavior.",
+    "UNIT": "parser helper or normalization branch",
+    "VALIDATION": "go test ./... -v"
+  },
+  "final_executable_prompt": "Goal:\nRefactor the parser path for clarity and duplication removal without changing behavior.\n\nContext:\nthe parser pipeline in internal/ast plus the normalization helpers it depends on\n\nConstraints:\n- Prefer deletion, simplification, and safe restructuring before extension; do not modify unrelated public CLI flags, placeholder registry semantics, unrelated packages, and output contract fields.\n\nExecution:\n- Refactor one contained parser helper or normalization branch at a time, prefer deleting duplication before adding new code, and continue until the parser flow is simpler, no behavior changes leak outside the target area, and go test ./... -v passes.\n\nValidation:\n- Run verification with go test ./... -v and show raw output.\n\nReview:\n- Verify the restructure stays contained, removes redundancy before extension, and preserves the optimize JSON response shape, placeholder manifest semantics, and current compiler behavior.\n\nAnalyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+}

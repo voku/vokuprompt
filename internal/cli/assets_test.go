@@ -103,6 +103,10 @@ func TestSkillDoc_DescribesRealWorkflow(t *testing.T) {
 	for _, fragment := range []string{
 		"vokuprompt categories",
 		"vokuprompt optimize --category bugfix",
+		"performance",
+		"refactor",
+		"review",
+		"tests",
 		"placeholder manifest",
 		"placeholders.json",
 		"failure analysis",
