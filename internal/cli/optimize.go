@@ -10,7 +10,7 @@ import (
 	"github.com/voku/vokuprompt/internal/output"
 )
 
-const executionRequest = "Analyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+const executionRequest = "Treat the selected category as fixed input chosen from the deterministic category registry.\n1. Use placeholder_manifest as the source of truth for which placeholders must be resolved now.\n2. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.\n3. Keep the selected category and compiled structure intact; do not silently rewrite the contract.\n4. If a required placeholder cannot be resolved safely, stop and ask for the missing input.\n5. After placeholder resolution, execute the final prompt.\n\nReturn:\n1. category confirmation\n2. placeholder resolution summary\n3. final executable prompt\n4. execution result"
 
 func ExecuteOptimize(args []string, out io.Writer) error {
 	fs := flag.NewFlagSet("optimize", flag.ContinueOnError)

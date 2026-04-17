@@ -9,7 +9,7 @@
 - Five built-in categories: `bugfix`, `performance`, `refactor`, `review`, `tests`.
 - Placeholder manifest in optimize output: lists every placeholder, its required status, section type, and source pattern.
 - Placeholder registry: `placeholders.json` with description, examples, resolution guidance, expected format, and preferred sources for every placeholder.
-- Execution request: optimize output includes a ready-to-use `execution_request` that instructs analyze → improve → execute.
+- Execution request: optimize output includes a meta prompt that tells the agent to resolve the compiled contract into a final executable prompt and then execute it.
 - Explain mode: `vokuprompt optimize --category <name> --explain` adds a selection trace with:
   - `required_patterns`: which patterns were mandatory for this category.
   - `rejected_by_conflict`: patterns dropped because a selected pattern conflicts with them.
@@ -23,6 +23,6 @@
 ### Design decisions
 
 - No embedded LLM. The tool is a deterministic compiler; the agent or human using it brings the execution context.
-- No automatic category detection. The caller chooses the category; the tool compiles the prompt.
+- No automatic category detection. The caller fetches and chooses the category; the tool deterministically compiles the prompt contract from that choice.
 - Analysis section renders before Validation in all prompts so the review category reads: execute → analyze → validate → challenge.
 - Pattern weights and role limits are the only selection mechanism. Conflicts are declared explicitly in `patterns.json`.
