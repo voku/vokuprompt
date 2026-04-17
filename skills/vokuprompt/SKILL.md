@@ -12,7 +12,7 @@ Use `vokuprompt` to turn a weak task request into a compiled prompt contract for
    - `review` for failure analysis, missing evidence, and challenge-oriented critique.
    - `tests` for failing-test-first work where tests are the proof.
 3. Run `vokuprompt optimize --category bugfix` (or another listed category).
-4. Inspect the returned `compiled_prompt`, `placeholder_manifest`, and `execution_request`.
+4. Inspect the returned compiled_prompt, `placeholder_manifest`, and `execution_request`.
 5. Resolve each placeholder with current task context plus `placeholders.json` from the repository root.
 6. Use the returned `execution_request` as the meta prompt that tells you how to build the final executable prompt after placeholder resolution.
 7. Execute the resolved prompt contract now.
@@ -100,7 +100,7 @@ Review:
 - Double-check the minimal patch and validate existing categories and optimize flags plus unchanged compiler selection behavior remains unchanged.
 
 Use the selected category as the deterministic task frame.
-1. Build the final executable prompt by resolving every required placeholder in `compiled_prompt` from repository facts and the current task context.
+1. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.
 2. Keep the selected category and compiled structure intact; do not silently rewrite the contract.
 3. If a required placeholder cannot be resolved safely, stop and ask for the missing input.
 4. After placeholder resolution, execute the final prompt.
@@ -183,7 +183,7 @@ Review:
 - Confirm the reported speedup comes from the dominant workload and that the existing search response schema, optimize CLI contract, and deterministic prompt rendering remains unchanged.
 
 Use the selected category as the deterministic task frame.
-1. Build the final executable prompt by resolving every required placeholder in `compiled_prompt` from repository facts and the current task context.
+1. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.
 2. Keep the selected category and compiled structure intact; do not silently rewrite the contract.
 3. If a required placeholder cannot be resolved safely, stop and ask for the missing input.
 4. After placeholder resolution, execute the final prompt.
