@@ -116,7 +116,7 @@ This is useful for debugging, reviewability, and understanding why one category 
 ## How an agent should use it
 
 1. Run `vokuprompt categories`.
-2. Choose the right category from that deterministic registry.
+2. Choose the right category from the deterministic category registry.
 3. Run `vokuprompt optimize --category <name>`.
 4. Read `compiled_prompt`, `placeholder_manifest`, and `execution_request`.
 5. Resolve placeholders using repository facts plus `placeholders.json`.

@@ -24,7 +24,7 @@ type exampleFixture struct {
 	ReturnedCompiledPrompt     string                         `json:"returned_compiled_prompt"`
 	PlaceholderManifestExcerpt []ast.PlaceholderManifestEntry `json:"placeholder_manifest_excerpt"`
 	PlaceholderResolution      map[string]string              `json:"placeholder_resolution"`
-	FinalExecutablePrompt      string                         `json:"final_executable_prompt"`
+	FinalAgentHandoff          string                         `json:"final_agent_handoff"`
 }
 
 var placeholderPattern = regexp.MustCompile(`\[[A-Z_]+\]`)
@@ -122,12 +122,12 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 				t.Fatalf("placeholder_resolution keys = %v, want %v", resolutionNames, manifestNames)
 			}
 
-			finalPrompt := resolveExecutablePrompt(resp.CompiledPrompt, example.PlaceholderResolution, resp.ExecutionRequest)
-			if finalPrompt != example.FinalExecutablePrompt {
-				t.Fatalf("final_executable_prompt mismatch\ngot:\n%s\nwant:\n%s", finalPrompt, example.FinalExecutablePrompt)
+			finalPrompt := buildAgentHandoff(resp.CompiledPrompt, example.PlaceholderResolution, resp.ExecutionRequest)
+			if finalPrompt != example.FinalAgentHandoff {
+				t.Fatalf("final_agent_handoff mismatch\ngot:\n%s\nwant:\n%s", finalPrompt, example.FinalAgentHandoff)
 			}
 			if placeholderPattern.MatchString(finalPrompt) {
-				t.Fatalf("final_executable_prompt still contains unresolved placeholders: %s", finalPrompt)
+				t.Fatalf("final_agent_handoff still contains unresolved placeholders: %s", finalPrompt)
 			}
 			lowerRequest := strings.ToLower(resp.ExecutionRequest)
 			if !strings.Contains(lowerRequest, "selected category") || !strings.Contains(lowerRequest, "final executable prompt") || !strings.Contains(lowerRequest, "execute the final prompt") {
@@ -175,7 +175,7 @@ func loadPlaceholderRegistry(t *testing.T) map[string]placeholderRegistryEntry {
 	return registry
 }
 
-func resolveExecutablePrompt(compiled string, resolutions map[string]string, executionRequest string) string {
+func buildAgentHandoff(compiled string, resolutions map[string]string, executionRequest string) string {
 	replacements := make([]string, 0, len(resolutions)*2)
 	for name, value := range resolutions {
 		replacements = append(replacements, "["+name+"]", value)
