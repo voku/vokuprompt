@@ -39,10 +39,16 @@ func TestCompile_ExactOutputAndDeterminism(t *testing.T) {
 			}
 		}
 
-		// VALIDATION appears in two source patterns; both should be captured.
+		// VALIDATION appears in two source patterns; check both name and order.
 		validationEntry := manifest[3]
-		if len(validationEntry.SourcePatterns) != 2 {
-			t.Fatalf("run %d: VALIDATION source_patterns = %v, want [verify verify_dup]", run+1, validationEntry.SourcePatterns)
+		wantSP := []string{"verify", "verify_dup"}
+		if len(validationEntry.SourcePatterns) != len(wantSP) {
+			t.Fatalf("run %d: VALIDATION source_patterns = %v, want %v", run+1, validationEntry.SourcePatterns, wantSP)
+		}
+		for i, sp := range wantSP {
+			if validationEntry.SourcePatterns[i] != sp {
+				t.Fatalf("run %d: VALIDATION source_patterns[%d] = %q, want %q", run+1, i, validationEntry.SourcePatterns[i], sp)
+			}
 		}
 	}
 }
@@ -58,5 +64,60 @@ func TestCompile_FramingHeaderNotDoubled(t *testing.T) {
 	const want = "Goal:\n[TASK]"
 	if compiled != want {
 		t.Fatalf("framing rendered as:\n%s\nwant:\n%s", compiled, want)
+	}
+}
+
+func TestCompile_PlaceholderInMultipleSectionsMergesNodeTypes(t *testing.T) {
+	// The same placeholder name appears in two different sections (framing + execution).
+	// The manifest entry must list both NodeTypes, sorted.
+	patterns := []engine.Pattern{
+		{Name: "p1", Role: "framing", Prompt: "Fix [TARGET]", Placeholders: []string{"TARGET"}},
+		{Name: "p2", Role: "execution", Prompt: "Run against [TARGET]", Placeholders: []string{"TARGET"}},
+	}
+
+	_, manifest := Compile(patterns)
+
+	if len(manifest) != 1 {
+		t.Fatalf("got %d manifest entries, want 1", len(manifest))
+	}
+	entry := manifest[0]
+	if entry.Name != "TARGET" {
+		t.Fatalf("manifest[0].Name = %q, want TARGET", entry.Name)
+	}
+
+	wantNodeTypes := []string{"Execution", "Framing"}
+	if len(entry.NodeTypes) != len(wantNodeTypes) {
+		t.Fatalf("NodeTypes = %v, want %v", entry.NodeTypes, wantNodeTypes)
+	}
+	for i, nt := range wantNodeTypes {
+		if entry.NodeTypes[i] != nt {
+			t.Fatalf("NodeTypes[%d] = %q, want %q", i, entry.NodeTypes[i], nt)
+		}
+	}
+
+	wantSourcePatterns := []string{"p1", "p2"}
+	if len(entry.SourcePatterns) != len(wantSourcePatterns) {
+		t.Fatalf("SourcePatterns = %v, want %v", entry.SourcePatterns, wantSourcePatterns)
+	}
+	for i, sp := range wantSourcePatterns {
+		if entry.SourcePatterns[i] != sp {
+			t.Fatalf("SourcePatterns[%d] = %q, want %q", i, entry.SourcePatterns[i], sp)
+		}
+	}
+}
+
+func TestCompile_SectionOrderIsCanonicalRegardlessOfInputOrder(t *testing.T) {
+	// Patterns given in non-canonical order: execution, framing, validation.
+	// Compiled prompt must still appear in canonical section order.
+	patterns := []engine.Pattern{
+		{Name: "exec", Role: "execution", Prompt: "Execute"},
+		{Name: "frame", Role: "framing", Prompt: "Frame"},
+		{Name: "validate", Role: "validation", Prompt: "Validate"},
+	}
+
+	compiled, _ := Compile(patterns)
+	const want = "Goal:\nFrame\n\nExecution:\n- Execute\n\nValidation:\n- Validate"
+	if compiled != want {
+		t.Fatalf("section order wrong\ngot:\n%s\nwant:\n%s", compiled, want)
 	}
 }
