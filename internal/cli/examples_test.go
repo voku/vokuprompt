@@ -129,8 +129,9 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 			if placeholderPattern.MatchString(finalPrompt) {
 				t.Fatalf("final_executable_prompt still contains unresolved placeholders: %s", finalPrompt)
 			}
-			if !strings.Contains(strings.ToLower(resp.ExecutionRequest), "analyze") || !strings.Contains(strings.ToLower(resp.ExecutionRequest), "improve") || !strings.Contains(strings.ToLower(resp.ExecutionRequest), "execute") {
-				t.Fatalf("execution_request must instruct analyze + improve + execute, got %q", resp.ExecutionRequest)
+			lowerRequest := strings.ToLower(resp.ExecutionRequest)
+			if !strings.Contains(lowerRequest, "selected category") || !strings.Contains(lowerRequest, "final executable prompt") || !strings.Contains(lowerRequest, "execute the final prompt") {
+				t.Fatalf("execution_request must instruct category framing + final prompt build + execute, got %q", resp.ExecutionRequest)
 			}
 		})
 	}

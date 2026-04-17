@@ -4,14 +4,14 @@
 
 ## What vokuprompt is
 
-- A small compiler from category + pattern definitions into a compiled prompt contract that becomes executable after placeholder resolution.
+- A deterministic compiler: the caller fetches categories, chooses one, and `vokuprompt` compiles the matching prompt contract.
 - A way to make task framing reviewable through `patterns.json`, `categories.json`, and `placeholders.json`.
 - A tool for both agents and humans to inspect how prompt shape changes by category.
 
 ## What vokuprompt is not
 
 - Not an embedded LLM.
-- Not an auto-detector of task intent.
+- Not an auto-detector of task intent: the agent must fetch categories and choose one before running `optimize`.
 - Not a general workflow runner or task tracker.
 - Not decorative docs: the JSON registries and skill file are the product boundary.
 
@@ -93,7 +93,7 @@ Example output shape:
       "source_patterns": ["goal_context_constraints_done"]
     }
   ],
-  "execution_request": "Analyze the original prompt, improve it, and execute the improved prompt now.\n\nReturn:\n1. failure analysis\n2. improved prompt\n3. execution result"
+  "execution_request": "Use the selected category as the deterministic task frame.\n1. Build the final executable prompt by resolving every required placeholder in `compiled_prompt` from repository facts and the current task context.\n2. Keep the selected category and compiled structure intact; do not silently rewrite the contract.\n3. If a required placeholder cannot be resolved safely, stop and ask for the missing input.\n4. After placeholder resolution, execute the final prompt.\n\nReturn:\n1. category confirmation\n2. placeholder resolution summary\n3. final executable prompt\n4. execution result"
 }
 ```
 
@@ -116,11 +116,11 @@ This is useful for debugging, reviewability, and understanding why one category 
 ## How an agent should use it
 
 1. Run `vokuprompt categories`.
-2. Choose the right category.
+2. Choose the right category from that deterministic registry.
 3. Run `vokuprompt optimize --category <name>`.
 4. Read `compiled_prompt`, `placeholder_manifest`, and `execution_request`.
 5. Resolve placeholders using repository facts plus `placeholders.json`.
-6. Use `execution_request` as the final execution instruction layer after placeholder resolution.
+6. Use `execution_request` as the meta prompt that tells the agent how to build the final executable prompt after placeholder resolution.
 7. Execute the resolved prompt contract.
 
 For the agent-oriented flow, see `skills/vokuprompt/SKILL.md`.
