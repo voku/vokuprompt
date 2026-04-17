@@ -118,7 +118,7 @@ This is useful for debugging, reviewability, and understanding why one category 
 1. Run `vokuprompt categories`.
 2. Choose the right category from that deterministic registry.
 3. Run `vokuprompt optimize --category <name>`.
-4. Read compiled_prompt, `placeholder_manifest`, and `execution_request`.
+4. Read `compiled_prompt`, `placeholder_manifest`, and `execution_request`.
 5. Resolve placeholders using repository facts plus `placeholders.json`.
 6. Use `execution_request` as the meta prompt that tells the agent how to build the final executable prompt after placeholder resolution.
 7. Execute the resolved prompt contract.
@@ -137,7 +137,7 @@ go run ./cmd/vokuprompt optimize --category review --explain
 Then compare:
 
 - `selected_patterns`
-- compiled_prompt
+- `compiled_prompt`
 - `placeholder_manifest`
 - `explanation.rejected_by_conflict`
 - `explanation.rejected_by_role_limits`

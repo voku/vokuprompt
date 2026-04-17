@@ -12,7 +12,7 @@ Use `vokuprompt` to turn a weak task request into a compiled prompt contract for
    - `review` for failure analysis, missing evidence, and challenge-oriented critique.
    - `tests` for failing-test-first work where tests are the proof.
 3. Run `vokuprompt optimize --category bugfix` (or another listed category).
-4. Inspect the returned compiled_prompt, `placeholder_manifest`, and `execution_request`.
+4. Inspect the returned `compiled_prompt`, `placeholder_manifest`, and `execution_request`.
 5. Resolve each placeholder with current task context plus `placeholders.json` from the repository root.
 6. Use the returned `execution_request` as the meta prompt that tells you how to build the final executable prompt after placeholder resolution.
 7. Execute the resolved prompt contract now.
