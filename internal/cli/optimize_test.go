@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -24,6 +25,24 @@ const testCategories = `[
     "role_limits":{"framing":1,"constraint":1,"validation":1},
     "required_patterns":["goal"],
     "optional_patterns":["scope","verify"]
+  }
+]`
+
+const explainPatterns = `[
+  {"name":"goal","role":"framing","prompt":"[TASK]","placeholders":["TASK"]},
+  {"name":"exec_fast","role":"execution","prompt":"Do [UNIT] fast.","placeholders":["UNIT"],"weights":{"bugfix":0.9}},
+  {"name":"exec_conflict","role":"execution","prompt":"Do [UNIT] another way.","placeholders":["UNIT"],"weights":{"bugfix":0.8},"conflicts":["exec_fast"]},
+  {"name":"verify_primary","role":"validation","prompt":"Run [VALIDATION].","placeholders":["VALIDATION"],"weights":{"bugfix":0.7}},
+  {"name":"verify_backup","role":"validation","prompt":"Run [VALIDATION] again.","placeholders":["VALIDATION"],"weights":{"bugfix":0.6}}
+]`
+
+const explainCategories = `[
+  {
+    "name":"bugfix",
+    "description":"Fix a bug with minimal patch.",
+    "role_limits":{"framing":1,"execution":2,"validation":1},
+    "required_patterns":["goal"],
+    "optional_patterns":["exec_fast","exec_conflict","verify_primary","verify_backup"]
   }
 ]`
 
@@ -116,6 +135,43 @@ func TestExecuteOptimize_ProducesCorrectContract(t *testing.T) {
 `
 	if out.String() != want {
 		t.Fatalf("optimize JSON contract mismatch\ngot:\n%s\nwant:\n%s", out.String(), want)
+	}
+}
+
+func TestExecuteOptimize_ExplainIncludesSelectionTrace(t *testing.T) {
+	dir := t.TempDir()
+	pp := writeTemp(t, dir, "patterns.json", explainPatterns)
+	cp := writeTemp(t, dir, "categories.json", explainCategories)
+
+	var out bytes.Buffer
+	if err := ExecuteOptimize([]string{"--category", "bugfix", "--explain", "--patterns", pp, "--categories", cp}, &out); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var resp output.OptimizeResponse
+	if err := json.Unmarshal(out.Bytes(), &resp); err != nil {
+		t.Fatalf("invalid JSON: %v\noutput: %s", err, out.String())
+	}
+
+	if resp.Explanation == nil {
+		t.Fatal("expected explanation for --explain")
+	}
+	if len(resp.Explanation.RejectedByConflict) != 1 || resp.Explanation.RejectedByConflict[0].Name != "exec_conflict" {
+		t.Fatalf("rejected_by_conflict = %+v", resp.Explanation.RejectedByConflict)
+	}
+	if len(resp.Explanation.RejectedByConflict[0].ConflictsWith) != 1 || resp.Explanation.RejectedByConflict[0].ConflictsWith[0] != "exec_fast" {
+		t.Fatalf("unexpected conflict details: %+v", resp.Explanation.RejectedByConflict[0])
+	}
+	if len(resp.Explanation.RejectedByRoleLimits) != 1 || resp.Explanation.RejectedByRoleLimits[0].Name != "verify_backup" {
+		t.Fatalf("rejected_by_role_limits = %+v", resp.Explanation.RejectedByRoleLimits)
+	}
+	if resp.Explanation.RejectedByRoleLimits[0].Role != "validation" || resp.Explanation.RejectedByRoleLimits[0].Limit != 1 {
+		t.Fatalf("unexpected role limit details: %+v", resp.Explanation.RejectedByRoleLimits[0])
+	}
+
+	wantPlaceholders := []string{"TASK", "UNIT", "VALIDATION"}
+	if !slices.Equal(resp.Explanation.RequiredPlaceholders, wantPlaceholders) {
+		t.Fatalf("required_placeholders = %v, want %v", resp.Explanation.RequiredPlaceholders, wantPlaceholders)
 	}
 }
 

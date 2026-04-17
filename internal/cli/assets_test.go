@@ -120,3 +120,33 @@ func TestSkillDoc_DescribesRealWorkflow(t *testing.T) {
 		}
 	}
 }
+
+func TestReadme_DescribesPublicOnboarding(t *testing.T) {
+	root := repoRoot(t)
+	data, err := os.ReadFile(filepath.Join(root, "README.md"))
+	if err != nil {
+		t.Fatalf("read README.md: %v", err)
+	}
+
+	doc := string(data)
+	for _, fragment := range []string{
+		"# vokuprompt",
+		"What vokuprompt is",
+		"What vokuprompt is not",
+		"Installation / Build",
+		"vokuprompt categories",
+		"vokuprompt optimize --category bugfix",
+		"--explain",
+		"How an agent should use it",
+		"How a human can test it manually",
+		"patterns.json",
+		"categories.json",
+		"placeholders.json",
+		"skills/vokuprompt/SKILL.md",
+		"product boundary",
+	} {
+		if !strings.Contains(doc, fragment) {
+			t.Fatalf("README.md missing %q", fragment)
+		}
+	}
+}

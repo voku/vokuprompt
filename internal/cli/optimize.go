@@ -16,6 +16,7 @@ func ExecuteOptimize(args []string, out io.Writer) error {
 	fs := flag.NewFlagSet("optimize", flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
 	categoryName := fs.String("category", "", "category name")
+	explain := fs.Bool("explain", false, "include pattern selection explanation")
 	patternsPath := fs.String("patterns", "patterns.json", "path to patterns.json")
 	categoriesPath := fs.String("categories", "categories.json", "path to categories.json")
 	if err := fs.Parse(args); err != nil {
@@ -40,13 +41,40 @@ func ExecuteOptimize(args []string, out io.Writer) error {
 		return fmt.Errorf("unknown category: %s", *categoryName)
 	}
 
-	selected := engine.SelectPatterns(patterns, category)
+	trace := engine.SelectPatternsWithTrace(patterns, category)
+	selected := trace.Selected
 	selectedNames := make([]string, 0, len(selected))
 	for _, pattern := range selected {
 		selectedNames = append(selectedNames, pattern.Name)
 	}
 
 	compiledPrompt, manifest := ast.Compile(selected)
+	requiredPlaceholders := make([]string, 0, len(manifest))
+	for _, entry := range manifest {
+		requiredPlaceholders = append(requiredPlaceholders, entry.Name)
+	}
+
+	var explanation *output.OptimizeExplanation
+	if *explain {
+		explanation = &output.OptimizeExplanation{
+			RejectedByConflict:   make([]output.OptimizeConflictRejection, 0, len(trace.RejectedByConflict)),
+			RejectedByRoleLimits: make([]output.OptimizeRoleLimitRejection, 0, len(trace.RejectedByRoleLimits)),
+			RequiredPlaceholders: requiredPlaceholders,
+		}
+		for _, rejection := range trace.RejectedByConflict {
+			explanation.RejectedByConflict = append(explanation.RejectedByConflict, output.OptimizeConflictRejection{
+				Name:          rejection.Name,
+				ConflictsWith: rejection.ConflictsWith,
+			})
+		}
+		for _, rejection := range trace.RejectedByRoleLimits {
+			explanation.RejectedByRoleLimits = append(explanation.RejectedByRoleLimits, output.OptimizeRoleLimitRejection{
+				Name:  rejection.Name,
+				Role:  rejection.Role,
+				Limit: rejection.Limit,
+			})
+		}
+	}
 
 	return output.WriteJSON(out, output.OptimizeResponse{
 		Category:            category.Name,
@@ -54,5 +82,6 @@ func ExecuteOptimize(args []string, out io.Writer) error {
 		CompiledPrompt:      compiledPrompt,
 		PlaceholderManifest: manifest,
 		ExecutionRequest:    executionRequest,
+		Explanation:         explanation,
 	})
 }

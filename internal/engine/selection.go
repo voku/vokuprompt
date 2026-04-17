@@ -20,11 +20,33 @@ type scoredPattern struct {
 	score   float64
 }
 
+type ConflictRejection struct {
+	Name          string
+	ConflictsWith []string
+}
+
+type RoleLimitRejection struct {
+	Name  string
+	Role  string
+	Limit int
+}
+
+type SelectionTrace struct {
+	Selected             []Pattern
+	RejectedByConflict   []ConflictRejection
+	RejectedByRoleLimits []RoleLimitRejection
+}
+
 func SelectPatterns(patterns []Pattern, category Category) []Pattern {
+	return SelectPatternsWithTrace(patterns, category).Selected
+}
+
+func SelectPatternsWithTrace(patterns []Pattern, category Category) SelectionTrace {
 	indexed := indexPatterns(patterns)
 	selected := make([]Pattern, 0, len(category.RequiredPatterns)+len(category.OptionalPatterns))
 	selectedNames := make(map[string]struct{})
 	roleUsage := make(map[string]int)
+	trace := SelectionTrace{}
 
 	for _, required := range category.RequiredPatterns {
 		pattern, ok := indexed[required]
@@ -58,9 +80,18 @@ func SelectPatterns(patterns []Pattern, category Category) []Pattern {
 			continue
 		}
 		if limit, hasLimit := category.RoleLimits[pattern.Role]; hasLimit && roleUsage[pattern.Role] >= limit {
+			trace.RejectedByRoleLimits = append(trace.RejectedByRoleLimits, RoleLimitRejection{
+				Name:  pattern.Name,
+				Role:  pattern.Role,
+				Limit: limit,
+			})
 			continue
 		}
-		if conflictsWithSelected(pattern, selected) {
+		if conflicts := conflictsWithSelected(pattern, selected); len(conflicts) > 0 {
+			trace.RejectedByConflict = append(trace.RejectedByConflict, ConflictRejection{
+				Name:          pattern.Name,
+				ConflictsWith: conflicts,
+			})
 			continue
 		}
 		selected = append(selected, pattern)
@@ -77,17 +108,19 @@ func SelectPatterns(patterns []Pattern, category Category) []Pattern {
 		return pi < pj
 	})
 
-	return selected
+	trace.Selected = selected
+	return trace
 }
 
-func conflictsWithSelected(candidate Pattern, selected []Pattern) bool {
+func conflictsWithSelected(candidate Pattern, selected []Pattern) []string {
+	var conflicts []string
 	for _, existing := range selected {
 		if hasConflict(candidate.Conflicts, existing.Name) || hasConflict(existing.Conflicts, candidate.Name) {
-			return true
+			conflicts = append(conflicts, existing.Name)
 		}
 	}
 
-	return false
+	return conflicts
 }
 
 func hasConflict(conflicts []string, name string) bool {

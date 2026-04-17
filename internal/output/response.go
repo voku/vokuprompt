@@ -14,6 +14,24 @@ type OptimizeResponse struct {
 	CompiledPrompt      string                         `json:"compiled_prompt"`
 	PlaceholderManifest []ast.PlaceholderManifestEntry `json:"placeholder_manifest"`
 	ExecutionRequest    string                         `json:"execution_request"`
+	Explanation         *OptimizeExplanation           `json:"explanation,omitempty"`
+}
+
+type OptimizeExplanation struct {
+	RejectedByConflict   []OptimizeConflictRejection  `json:"rejected_by_conflict,omitempty"`
+	RejectedByRoleLimits []OptimizeRoleLimitRejection `json:"rejected_by_role_limits,omitempty"`
+	RequiredPlaceholders []string                     `json:"required_placeholders"`
+}
+
+type OptimizeConflictRejection struct {
+	Name          string   `json:"name"`
+	ConflictsWith []string `json:"conflicts_with"`
+}
+
+type OptimizeRoleLimitRejection struct {
+	Name  string `json:"name"`
+	Role  string `json:"role"`
+	Limit int    `json:"limit"`
 }
 
 func WriteJSON(w io.Writer, value any) error {
