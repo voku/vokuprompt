@@ -34,7 +34,7 @@ func LoadCategories(path string) ([]Category, error) {
 	return categories, nil
 }
 
-func IndexPatterns(patterns []Pattern) map[string]Pattern {
+func indexPatterns(patterns []Pattern) map[string]Pattern {
 	indexed := make(map[string]Pattern, len(patterns))
 	for _, pattern := range patterns {
 		indexed[pattern.Name] = pattern

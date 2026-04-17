@@ -2,7 +2,9 @@ package engine
 
 import "sort"
 
-var rolePriority = map[string]int{
+// RoleOrder defines the canonical ordering of pattern roles.
+// The ast package uses this same ordering for section layout in the rendered prompt.
+var RoleOrder = map[string]int{
 	"framing":    0,
 	"constraint": 1,
 	"execution":  2,
@@ -19,7 +21,7 @@ type scoredPattern struct {
 }
 
 func SelectPatterns(patterns []Pattern, category Category) []Pattern {
-	indexed := IndexPatterns(patterns)
+	indexed := indexPatterns(patterns)
 	selected := make([]Pattern, 0, len(category.RequiredPatterns)+len(category.OptionalPatterns))
 	selectedNames := make(map[string]struct{})
 	roleUsage := make(map[string]int)
@@ -67,8 +69,8 @@ func SelectPatterns(patterns []Pattern, category Category) []Pattern {
 	}
 
 	sort.SliceStable(selected, func(i, j int) bool {
-		pi := rolePriority[selected[i].Role]
-		pj := rolePriority[selected[j].Role]
+		pi := RoleOrder[selected[i].Role]
+		pj := RoleOrder[selected[j].Role]
 		if pi == pj {
 			return selected[i].Name < selected[j].Name
 		}

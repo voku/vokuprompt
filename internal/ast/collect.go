@@ -21,7 +21,9 @@ func CollectPlaceholders(root *Node) []PlaceholderManifestEntry {
 					byName[placeholder] = entry
 				}
 				entry.nodeTypes[string(section.Type)] = struct{}{}
-				entry.sourcePatterns[node.SourcePattern] = struct{}{}
+				for _, sp := range node.SourcePatterns {
+					entry.sourcePatterns[sp] = struct{}{}
+				}
 			}
 		}
 	}

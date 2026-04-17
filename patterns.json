@@ -3,7 +3,7 @@
     "name": "goal_context_constraints_done",
     "role": "framing",
     "description": "Define goal and context placeholders.",
-    "prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]",
+    "prompt": "[TASK]\n\nContext:\n[CONTEXT_TARGET]",
     "placeholders": ["TASK", "CONTEXT_TARGET"],
     "weights": {
       "bugfix": 1.0

@@ -6,11 +6,10 @@ func ExpandPatterns(patterns []engine.Pattern) []*Node {
 	nodes := make([]*Node, 0, len(patterns))
 	for _, pattern := range patterns {
 		nodes = append(nodes, &Node{
-			Type:          roleToNodeType(pattern.Role),
-			Key:           pattern.Name,
-			Text:          pattern.Prompt,
-			Placeholders:  append([]string(nil), pattern.Placeholders...),
-			SourcePattern: pattern.Name,
+			Type:           roleToNodeType(pattern.Role),
+			Text:           pattern.Prompt,
+			Placeholders:   append([]string(nil), pattern.Placeholders...),
+			SourcePatterns: []string{pattern.Name},
 		})
 	}
 

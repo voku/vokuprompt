@@ -15,12 +15,11 @@ const (
 )
 
 type Node struct {
-	Type          NodeType
-	Key           string
-	Text          string
-	Placeholders  []string
-	Children      []*Node
-	SourcePattern string
+	Type           NodeType
+	Text           string
+	Placeholders   []string
+	Children       []*Node
+	SourcePatterns []string
 }
 
 type PlaceholderManifestEntry struct {
