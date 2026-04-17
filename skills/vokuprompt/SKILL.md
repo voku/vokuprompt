@@ -61,7 +61,7 @@ Execution:
 - Work step by step over [UNIT] and continue until [DONE_CONDITION].
 
 Validation:
-- Run verification with [VALIDATION] and show raw output.
+- Run [VALIDATION] and show raw output.
 
 Review:
 - Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.
@@ -93,7 +93,7 @@ Execution:
 - Work step by step over one failing contract check, then the minimal code change, then rerun tests and continue until go test ./... -v passes and the optimize JSON contract includes the new field.
 
 Validation:
-- Run verification with go test ./... -v and show raw output.
+- Run go test ./... -v and show raw output.
 
 Review:
 - Double-check the minimal patch and validate existing categories and optimize flags plus unchanged compiler selection behavior remains unchanged.

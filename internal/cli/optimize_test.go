@@ -156,6 +156,12 @@ func TestExecuteOptimize_ExplainIncludesSelectionTrace(t *testing.T) {
 	if resp.Explanation == nil {
 		t.Fatal("expected explanation for --explain")
 	}
+
+	// required_patterns: only "goal" was in required_patterns for this category.
+	if len(resp.Explanation.RequiredPatterns) != 1 || resp.Explanation.RequiredPatterns[0] != "goal" {
+		t.Fatalf("required_patterns = %v, want [goal]", resp.Explanation.RequiredPatterns)
+	}
+
 	if len(resp.Explanation.RejectedByConflict) != 1 || resp.Explanation.RejectedByConflict[0].Name != "exec_conflict" {
 		t.Fatalf("rejected_by_conflict = %+v", resp.Explanation.RejectedByConflict)
 	}
@@ -167,6 +173,10 @@ func TestExecuteOptimize_ExplainIncludesSelectionTrace(t *testing.T) {
 	}
 	if resp.Explanation.RejectedByRoleLimits[0].Role != "validation" || resp.Explanation.RejectedByRoleLimits[0].Limit != 1 {
 		t.Fatalf("unexpected role limit details: %+v", resp.Explanation.RejectedByRoleLimits[0])
+	}
+	// blocked_by must name the winner that took the validation slot.
+	if resp.Explanation.RejectedByRoleLimits[0].BlockedBy != "verify_primary" {
+		t.Fatalf("blocked_by = %q, want \"verify_primary\"", resp.Explanation.RejectedByRoleLimits[0].BlockedBy)
 	}
 
 	wantPlaceholders := []string{"TASK", "UNIT", "VALIDATION"}

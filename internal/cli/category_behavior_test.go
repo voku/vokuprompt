@@ -82,6 +82,15 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 				t.Fatalf("%s compiled_prompt missing %q\n%s", tc.category, fragment, resp.CompiledPrompt)
 			}
 		}
+		// review: Analysis section must appear before Validation so the prompt reads
+		// execute → analyze → validate → challenge, not the reversed form.
+		if tc.category == "review" {
+			analysisPos := strings.Index(resp.CompiledPrompt, "Analysis:")
+			validationPos := strings.Index(resp.CompiledPrompt, "Validation:")
+			if analysisPos == -1 || validationPos == -1 || analysisPos >= validationPos {
+				t.Fatalf("review: Analysis section must appear before Validation in compiled prompt\n%s", resp.CompiledPrompt)
+			}
+		}
 	}
 
 	seen := map[string]string{}

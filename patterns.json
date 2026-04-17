@@ -17,7 +17,7 @@
     "name": "verification_prompt",
     "role": "validation",
     "description": "Require runnable verification command.",
-    "prompt": "Run verification with [VALIDATION] and show raw output.",
+    "prompt": "Run [VALIDATION] and show raw output.",
     "placeholders": ["VALIDATION"],
     "weights": {
       "bugfix": 0.9,

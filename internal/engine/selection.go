@@ -4,12 +4,13 @@ import "sort"
 
 // RoleOrder defines the canonical ordering of pattern roles.
 // The ast package uses this same ordering for section layout in the rendered prompt.
+// analysis is ordered before validation so review prompts read: execute → analyze → validate → challenge.
 var RoleOrder = map[string]int{
 	"framing":    0,
 	"constraint": 1,
 	"execution":  2,
-	"validation": 3,
-	"analysis":   4,
+	"analysis":   3,
+	"validation": 4,
 	"review":     5,
 	"done":       6,
 	"output":     7,
@@ -26,13 +27,15 @@ type ConflictRejection struct {
 }
 
 type RoleLimitRejection struct {
-	Name  string
-	Role  string
-	Limit int
+	Name      string
+	Role      string
+	Limit     int
+	BlockedBy string // name of the pattern that already occupies this role slot
 }
 
 type SelectionTrace struct {
 	Selected             []Pattern
+	RequiredSelected     []string // names of required patterns that were found and selected
 	RejectedByConflict   []ConflictRejection
 	RejectedByRoleLimits []RoleLimitRejection
 }
@@ -46,6 +49,7 @@ func SelectPatternsWithTrace(patterns []Pattern, category Category) SelectionTra
 	selected := make([]Pattern, 0, len(category.RequiredPatterns)+len(category.OptionalPatterns))
 	selectedNames := make(map[string]struct{})
 	roleUsage := make(map[string]int)
+	roleOccupant := make(map[string]string) // first pattern name selected per role
 	trace := SelectionTrace{}
 
 	for _, required := range category.RequiredPatterns {
@@ -56,6 +60,10 @@ func SelectPatternsWithTrace(patterns []Pattern, category Category) SelectionTra
 		selected = append(selected, pattern)
 		selectedNames[pattern.Name] = struct{}{}
 		roleUsage[pattern.Role]++
+		if roleOccupant[pattern.Role] == "" {
+			roleOccupant[pattern.Role] = pattern.Name
+		}
+		trace.RequiredSelected = append(trace.RequiredSelected, pattern.Name)
 	}
 
 	scored := make([]scoredPattern, 0, len(category.OptionalPatterns))
@@ -81,9 +89,10 @@ func SelectPatternsWithTrace(patterns []Pattern, category Category) SelectionTra
 		}
 		if limit, hasLimit := category.RoleLimits[pattern.Role]; hasLimit && roleUsage[pattern.Role] >= limit {
 			trace.RejectedByRoleLimits = append(trace.RejectedByRoleLimits, RoleLimitRejection{
-				Name:  pattern.Name,
-				Role:  pattern.Role,
-				Limit: limit,
+				Name:      pattern.Name,
+				Role:      pattern.Role,
+				Limit:     limit,
+				BlockedBy: roleOccupant[pattern.Role],
 			})
 			continue
 		}
@@ -97,6 +106,9 @@ func SelectPatternsWithTrace(patterns []Pattern, category Category) SelectionTra
 		selected = append(selected, pattern)
 		selectedNames[pattern.Name] = struct{}{}
 		roleUsage[pattern.Role]++
+		if roleOccupant[pattern.Role] == "" {
+			roleOccupant[pattern.Role] = pattern.Name
+		}
 	}
 
 	sort.SliceStable(selected, func(i, j int) bool {

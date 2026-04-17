@@ -84,7 +84,7 @@ Example output shape:
     "verification_prompt",
     "double_check"
   ],
-  "compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Do not modify unrelated [SCOPE_ELEMENTS].\n\nExecution:\n- Work step by step over [UNIT] and continue until [DONE_CONDITION].\n\nValidation:\n- Run verification with [VALIDATION] and show raw output.\n\nReview:\n- Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.",
+  "compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Do not modify unrelated [SCOPE_ELEMENTS].\n\nExecution:\n- Work step by step over [UNIT] and continue until [DONE_CONDITION].\n\nValidation:\n- Run [VALIDATION] and show raw output.\n\nReview:\n- Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.",
   "placeholder_manifest": [
     {
       "name": "CONTEXT_TARGET",

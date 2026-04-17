@@ -57,6 +57,7 @@ func ExecuteOptimize(args []string, out io.Writer) error {
 	var explanation *output.OptimizeExplanation
 	if *explain {
 		explanation = &output.OptimizeExplanation{
+			RequiredPatterns:     trace.RequiredSelected,
 			RejectedByConflict:   make([]output.OptimizeConflictRejection, 0, len(trace.RejectedByConflict)),
 			RejectedByRoleLimits: make([]output.OptimizeRoleLimitRejection, 0, len(trace.RejectedByRoleLimits)),
 			RequiredPlaceholders: requiredPlaceholders,
@@ -69,9 +70,10 @@ func ExecuteOptimize(args []string, out io.Writer) error {
 		}
 		for _, rejection := range trace.RejectedByRoleLimits {
 			explanation.RejectedByRoleLimits = append(explanation.RejectedByRoleLimits, output.OptimizeRoleLimitRejection{
-				Name:  rejection.Name,
-				Role:  rejection.Role,
-				Limit: rejection.Limit,
+				Name:      rejection.Name,
+				Role:      rejection.Role,
+				Limit:     rejection.Limit,
+				BlockedBy: rejection.BlockedBy,
 			})
 		}
 	}

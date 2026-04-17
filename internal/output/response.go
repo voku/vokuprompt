@@ -18,9 +18,10 @@ type OptimizeResponse struct {
 }
 
 type OptimizeExplanation struct {
-	RejectedByConflict   []OptimizeConflictRejection  `json:"rejected_by_conflict,omitempty"`
+	RequiredPatterns     []string                    `json:"required_patterns,omitempty"`
+	RejectedByConflict   []OptimizeConflictRejection `json:"rejected_by_conflict,omitempty"`
 	RejectedByRoleLimits []OptimizeRoleLimitRejection `json:"rejected_by_role_limits,omitempty"`
-	RequiredPlaceholders []string                     `json:"required_placeholders"`
+	RequiredPlaceholders []string                    `json:"required_placeholders"`
 }
 
 type OptimizeConflictRejection struct {
@@ -29,9 +30,10 @@ type OptimizeConflictRejection struct {
 }
 
 type OptimizeRoleLimitRejection struct {
-	Name  string `json:"name"`
-	Role  string `json:"role"`
-	Limit int    `json:"limit"`
+	Name      string `json:"name"`
+	Role      string `json:"role"`
+	Limit     int    `json:"limit"`
+	BlockedBy string `json:"blocked_by,omitempty"`
 }
 
 func WriteJSON(w io.Writer, value any) error {
