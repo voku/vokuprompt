@@ -24,11 +24,41 @@ go test ./... -v
 go build ./cmd/vokuprompt
 ```
 
+The latest installable GitHub Actions bundle is published by the `Build Artifact` workflow on `main`.
+It contains:
+
+- the `vokuprompt` Linux binary
+- `categories.json`
+- `patterns.json`
+- `placeholders.json`
+- `skills/vokuprompt/SKILL.md`
+
 Run directly without installing:
 
 ```bash
 go run ./cmd/vokuprompt categories
 go run ./cmd/vokuprompt optimize --category bugfix
+```
+
+## Copy-paste prompt for Copilot setup steps
+
+If you want another coding-agent repository to preload `vokuprompt` from the latest build artifact, give the agent this prompt:
+
+```text
+Add a `.github/workflows/copilot-setup-steps.yml` workflow for GitHub Copilot cloud agent.
+
+Requirements:
+- Use a single `copilot-setup-steps` job on `ubuntu-latest`.
+- Use least-privilege permissions, including `actions: read` and `contents: read`.
+- Download the latest successful `vokuprompt-linux-amd64` artifact from the `Build Artifact` workflow in `voku/vokuprompt` on the `main` branch.
+- Extract the tarball into `/usr/local/share/vokuprompt`.
+- Keep the binary at `/usr/local/share/vokuprompt/vokuprompt`, make it executable, and symlink `/usr/local/bin/vokuprompt` to it.
+- Keep `categories.json`, `patterns.json`, `placeholders.json`, and `skills/vokuprompt/SKILL.md` under `/usr/local/share/vokuprompt`.
+- Verify the install with:
+  `vokuprompt categories`
+- Make the workflow runnable via `workflow_dispatch` and also validate changes when the workflow file is edited.
+
+Return the full workflow file, ready to paste.
 ```
 
 ## categories example

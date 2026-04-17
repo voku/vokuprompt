@@ -16,7 +16,7 @@ func ExecuteCategories(args []string, out io.Writer) error {
 		return err
 	}
 
-	categories, err := engine.LoadCategories(*categoriesPath)
+	categories, err := engine.LoadCategories(resolveAssetPath(*categoriesPath))
 	if err != nil {
 		return err
 	}
