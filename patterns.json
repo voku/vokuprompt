@@ -1,0 +1,53 @@
+[
+  {
+    "name": "goal_context_constraints_done",
+    "role": "framing",
+    "description": "Define goal and context placeholders.",
+    "prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]",
+    "placeholders": ["TASK", "CONTEXT_TARGET"],
+    "weights": {
+      "bugfix": 1.0
+    }
+  },
+  {
+    "name": "verification_prompt",
+    "role": "validation",
+    "description": "Require runnable verification command.",
+    "prompt": "Run verification with [VALIDATION] and show raw output.",
+    "placeholders": ["VALIDATION"],
+    "weights": {
+      "bugfix": 0.9
+    }
+  },
+  {
+    "name": "step_loop",
+    "role": "execution",
+    "description": "Execute in deterministic steps until done.",
+    "prompt": "Work step by step over [UNIT] and continue until [DONE_CONDITION].",
+    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "weights": {
+      "bugfix": 0.85
+    },
+    "conflicts": ["multi_pass"]
+  },
+  {
+    "name": "double_check",
+    "role": "review",
+    "description": "Require explicit self-review.",
+    "prompt": "Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.",
+    "placeholders": ["STABLE_INTERFACE"],
+    "weights": {
+      "bugfix": 0.6
+    }
+  },
+  {
+    "name": "scope_containment",
+    "role": "constraint",
+    "description": "Keep scope narrow and explicit.",
+    "prompt": "Do not modify unrelated [SCOPE_ELEMENTS].",
+    "placeholders": ["SCOPE_ELEMENTS"],
+    "weights": {
+      "bugfix": 0.8
+    }
+  }
+]

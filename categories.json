@@ -1,0 +1,29 @@
+[
+  {
+    "name": "bugfix",
+    "description": "Fix a bug with minimal patch and explicit proof.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "validation": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "verification_prompt",
+      "step_loop",
+      "double_check",
+      "scope_containment"
+    ],
+    "focus": [
+      "minimal patch",
+      "explicit verification"
+    ]
+  }
+]
