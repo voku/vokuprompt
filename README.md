@@ -1,10 +1,10 @@
 # vokuprompt
 
-`vokuprompt` turns a weak task request into a compiled execution prompt for a coding agent.
+`vokuprompt` turns a weak task request into a compiled prompt contract for a coding agent.
 
 ## What vokuprompt is
 
-- A small compiler from category + pattern definitions into an execution-ready prompt.
+- A small compiler from category + pattern definitions into a compiled prompt contract that becomes executable after placeholder resolution.
 - A way to make task framing reviewable through `patterns.json`, `categories.json`, and `placeholders.json`.
 - A tool for both agents and humans to inspect how prompt shape changes by category.
 
@@ -118,10 +118,10 @@ This is useful for debugging, reviewability, and understanding why one category 
 1. Run `vokuprompt categories`.
 2. Choose the right category.
 3. Run `vokuprompt optimize --category <name>`.
-4. Read `compiled_prompt` and `placeholder_manifest`.
+4. Read `compiled_prompt`, `placeholder_manifest`, and `execution_request`.
 5. Resolve placeholders using repository facts plus `placeholders.json`.
-6. Append `execution_request`.
-7. Execute the filled prompt.
+6. Use `execution_request` as the final execution instruction layer after placeholder resolution.
+7. Execute the resolved prompt contract.
 
 For the agent-oriented flow, see `skills/vokuprompt/SKILL.md`.
 

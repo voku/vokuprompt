@@ -1,6 +1,6 @@
 # vokuprompt
 
-Use `vokuprompt` to turn a weak task request into a compiled execution prompt for a coding agent.
+Use `vokuprompt` to turn a weak task request into a compiled prompt contract for a coding agent.
 
 ## Workflow
 
@@ -12,10 +12,10 @@ Use `vokuprompt` to turn a weak task request into a compiled execution prompt fo
    - `review` for failure analysis, missing evidence, and challenge-oriented critique.
    - `tests` for failing-test-first work where tests are the proof.
 3. Run `vokuprompt optimize --category bugfix` (or another listed category).
-4. Inspect the returned `compiled_prompt` and `placeholder_manifest`.
+4. Inspect the returned `compiled_prompt`, `placeholder_manifest`, and `execution_request`.
 5. Resolve each placeholder with current task context plus `placeholders.json` from the repository root.
-6. Append the returned `execution_request`.
-7. Execute the filled prompt now.
+6. Use the returned `execution_request` as the final execution instruction layer after placeholder resolution.
+7. Execute the resolved prompt contract now.
 8. Return:
    1. failure analysis
    2. improved prompt
