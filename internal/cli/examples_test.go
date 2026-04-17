@@ -17,14 +17,14 @@ import (
 )
 
 type exampleFixture struct {
-	Name                     string                         `json:"name"`
-	OriginalWeakPrompt       string                         `json:"original_weak_prompt"`
-	ChosenCategory           string                         `json:"chosen_category"`
-	OptimizeCommand          string                         `json:"optimize_command"`
-	ReturnedCompiledPrompt   string                         `json:"returned_compiled_prompt"`
-	PlaceholderManifestExcer []ast.PlaceholderManifestEntry `json:"placeholder_manifest_excerpt"`
-	PlaceholderResolution    map[string]string              `json:"placeholder_resolution"`
-	FinalExecutablePrompt    string                         `json:"final_executable_prompt"`
+	Name                       string                         `json:"name"`
+	OriginalWeakPrompt         string                         `json:"original_weak_prompt"`
+	ChosenCategory             string                         `json:"chosen_category"`
+	OptimizeCommand            string                         `json:"optimize_command"`
+	ReturnedCompiledPrompt     string                         `json:"returned_compiled_prompt"`
+	PlaceholderManifestExcerpt []ast.PlaceholderManifestEntry `json:"placeholder_manifest_excerpt"`
+	PlaceholderResolution      map[string]string              `json:"placeholder_resolution"`
+	FinalExecutablePrompt      string                         `json:"final_executable_prompt"`
 }
 
 var placeholderPattern = regexp.MustCompile(`\[[A-Z_]+\]`)
@@ -71,8 +71,8 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 			if example.ReturnedCompiledPrompt != resp.CompiledPrompt {
 				t.Fatalf("returned_compiled_prompt mismatch\ngot:\n%s\nwant:\n%s", example.ReturnedCompiledPrompt, resp.CompiledPrompt)
 			}
-			if !reflect.DeepEqual(example.PlaceholderManifestExcer, resp.PlaceholderManifest) {
-				t.Fatalf("placeholder_manifest_excerpt mismatch\ngot:  %+v\nwant: %+v", example.PlaceholderManifestExcer, resp.PlaceholderManifest)
+			if !reflect.DeepEqual(example.PlaceholderManifestExcerpt, resp.PlaceholderManifest) {
+				t.Fatalf("placeholder_manifest_excerpt mismatch\ngot:  %+v\nwant: %+v", example.PlaceholderManifestExcerpt, resp.PlaceholderManifest)
 			}
 
 			resolutionNames := make([]string, 0, len(example.PlaceholderResolution))
