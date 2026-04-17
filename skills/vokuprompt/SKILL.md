@@ -8,7 +8,7 @@ Use `vokuprompt` to turn a weak task request into a compiled execution prompt fo
 2. Choose the best category for the task.
 3. Run `vokuprompt optimize --category bugfix` (or another listed category).
 4. Inspect the returned `compiled_prompt` and `placeholder_manifest`.
-5. Resolve each placeholder with current task context plus `/home/runner/work/vokuprompt/vokuprompt/placeholders.json`.
+5. Resolve each placeholder with current task context plus `placeholders.json` from the repository root.
 6. Append the returned `execution_request`.
 7. Execute the filled prompt now.
 8. Return:
