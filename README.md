@@ -7,12 +7,14 @@
 - A deterministic compiler: the caller fetches categories, chooses one, and `vokuprompt` compiles the matching prompt contract.
 - A way to make task framing reviewable through `patterns.json`, `categories.json`, and `placeholders.json`.
 - A tool for both agents and humans to inspect how prompt shape changes by category.
+- A deterministic way to force post-task memory capture contracts when meaningful new understanding must be written back to a repo-local memory store.
 
 ## What vokuprompt is not
 
 - Not an embedded LLM.
 - Not an auto-detector of task intent: the agent must fetch categories and choose one before running `optimize`.
 - Not a general workflow runner or task tracker.
+- Not the memory store itself: it only compiles the deterministic write-back contract.
 - Not decorative docs: the JSON registries and skill file are the product boundary.
 
 ## Installation / Build
@@ -143,6 +145,22 @@ go run ./cmd/vokuprompt optimize --category bugfix --explain
 
 This is useful for debugging, reviewability, and understanding why one category compiles differently from another.
 
+## Memory-forcing use case
+
+When non-trivial discovery, debugging, refactoring, or implementation work creates durable new understanding, run a memory-oriented category after the primary task so the agent compiles a deterministic write-back contract.
+
+Example commands:
+
+```bash
+go run ./cmd/vokuprompt categories
+go run ./cmd/vokuprompt optimize --category code_discovery
+go run ./cmd/vokuprompt optimize --category debugging_digest
+go run ./cmd/vokuprompt optimize --category architecture_memory
+go run ./cmd/vokuprompt optimize --category handoff_memory
+```
+
+Use these categories to force evidence-backed, privacy-aware write-back into the repo-local memory store already chosen by the host repository. `vokuprompt` stays the generic compiler for the contract and does not define a new persistence model.
+
 ## How an agent should use it
 
 1. Run `vokuprompt categories`.
@@ -152,6 +170,7 @@ This is useful for debugging, reviewability, and understanding why one category 
 5. Resolve placeholders using repository facts plus `placeholders.json`.
 6. Use `execution_request` as the meta prompt that tells the agent how to build the final executable prompt after placeholder resolution.
 7. Execute the resolved prompt contract.
+8. If meaningful new understanding emerged, run a memory-oriented category and complete the repo-local write-back before stopping.
 
 For the agent-oriented flow, see `skills/vokuprompt/SKILL.md`.
 

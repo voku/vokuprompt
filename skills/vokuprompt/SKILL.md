@@ -11,6 +11,7 @@ Use `vokuprompt` to turn a weak task request into a compiled prompt contract for
    - `refactor` for safe restructuring, containment, and deletion-before-extension.
    - `review` for failure analysis, missing evidence, and challenge-oriented critique.
    - `tests` for failing-test-first work where tests are the proof.
+   - `code_discovery`, `implementation_learning`, `debugging_digest`, `architecture_memory`, `claim_update`, `handoff_memory`, or `memory_review` when the task produced durable understanding that must be written back.
 3. Run `vokuprompt optimize --category bugfix` (or another listed category).
 4. Inspect the returned `compiled_prompt`, `placeholder_manifest`, and `execution_request` so you know both the prompt contract and the meta prompt for placeholder resolution and execution.
 5. Resolve each placeholder with current task context plus `placeholders.json` from the repository root.
@@ -21,6 +22,17 @@ Use `vokuprompt` to turn a weak task request into a compiled prompt contract for
    2. placeholder resolution summary
    3. final executable prompt
    4. execution result
+
+## Memory write-back rules
+
+- After non-trivial discovery, debugging, refactoring, or implementation work, run a memory-oriented category before stopping.
+- Save durable learnings to the repo-local memory store already used by the current repository; `vokuprompt` compiles the contract, but it is not the memory store itself.
+- Task completion alone is not a stopping condition when meaningful new understanding emerged; finish the memory write-back too.
+- Prefer:
+  - `vokuprompt optimize --category code_discovery` after exploration that revealed durable codebase facts.
+  - `vokuprompt optimize --category debugging_digest` after debugging that changed what you believe.
+  - `vokuprompt optimize --category implementation_learning` or `claim_update` after implementation or refactor work that changed how the system should be understood.
+  - `vokuprompt optimize --category handoff_memory` before handing off meaningful unfinished context.
 
 ## Placeholder resolution rules
 

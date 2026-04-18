@@ -4,7 +4,10 @@
     "role": "framing",
     "description": "Define goal and context placeholders.",
     "prompt": "[TASK]\n\nContext:\n[CONTEXT_TARGET]",
-    "placeholders": ["TASK", "CONTEXT_TARGET"],
+    "placeholders": [
+      "TASK",
+      "CONTEXT_TARGET"
+    ],
     "weights": {
       "bugfix": 1.0,
       "performance": 1.0,
@@ -18,7 +21,9 @@
     "role": "validation",
     "description": "Require runnable verification command.",
     "prompt": "Run [VALIDATION] and show raw output.",
-    "placeholders": ["VALIDATION"],
+    "placeholders": [
+      "VALIDATION"
+    ],
     "weights": {
       "bugfix": 0.9,
       "performance": 0.3,
@@ -32,7 +37,10 @@
     "role": "execution",
     "description": "Execute in deterministic steps until done.",
     "prompt": "Work step by step over [UNIT] and continue until [DONE_CONDITION].",
-    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "placeholders": [
+      "UNIT",
+      "DONE_CONDITION"
+    ],
     "weights": {
       "bugfix": 0.85,
       "performance": 0.2,
@@ -46,7 +54,9 @@
     "role": "review",
     "description": "Require explicit self-review.",
     "prompt": "Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.",
-    "placeholders": ["STABLE_INTERFACE"],
+    "placeholders": [
+      "STABLE_INTERFACE"
+    ],
     "weights": {
       "bugfix": 0.6,
       "performance": 0.2,
@@ -60,7 +70,9 @@
     "role": "constraint",
     "description": "Keep scope narrow and explicit.",
     "prompt": "Do not modify unrelated [SCOPE_ELEMENTS].",
-    "placeholders": ["SCOPE_ELEMENTS"],
+    "placeholders": [
+      "SCOPE_ELEMENTS"
+    ],
     "weights": {
       "bugfix": 0.8,
       "performance": 0.2,
@@ -74,7 +86,9 @@
     "role": "constraint",
     "description": "Require realistic performance claims and narrow scope.",
     "prompt": "Do not claim a speedup without realistic dominant-workload evidence, and do not modify unrelated [SCOPE_ELEMENTS].",
-    "placeholders": ["SCOPE_ELEMENTS"],
+    "placeholders": [
+      "SCOPE_ELEMENTS"
+    ],
     "weights": {
       "performance": 0.95
     }
@@ -84,7 +98,10 @@
     "role": "execution",
     "description": "Drive performance work from measurement and dominant workload.",
     "prompt": "Measure the dominant workload first, then make one benchmark-backed change over [UNIT] at a time and continue until [DONE_CONDITION].",
-    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "placeholders": [
+      "UNIT",
+      "DONE_CONDITION"
+    ],
     "weights": {
       "performance": 0.95
     }
@@ -94,7 +111,9 @@
     "role": "validation",
     "description": "Demand realistic benchmark validation.",
     "prompt": "Run [VALIDATION] against realistic benchmarks that reflect the dominant workload and show raw output.",
-    "placeholders": ["VALIDATION"],
+    "placeholders": [
+      "VALIDATION"
+    ],
     "weights": {
       "performance": 0.98
     }
@@ -104,7 +123,9 @@
     "role": "review",
     "description": "Review performance claims against stable interfaces.",
     "prompt": "Confirm the reported speedup comes from the dominant workload and that [STABLE_INTERFACE] remains unchanged.",
-    "placeholders": ["STABLE_INTERFACE"],
+    "placeholders": [
+      "STABLE_INTERFACE"
+    ],
     "weights": {
       "performance": 0.85
     }
@@ -114,7 +135,9 @@
     "role": "constraint",
     "description": "Keep refactors contained and simplification-first.",
     "prompt": "Prefer deletion, simplification, and safe restructuring before extension; do not modify unrelated [SCOPE_ELEMENTS].",
-    "placeholders": ["SCOPE_ELEMENTS"],
+    "placeholders": [
+      "SCOPE_ELEMENTS"
+    ],
     "weights": {
       "refactor": 0.98
     }
@@ -124,7 +147,10 @@
     "role": "execution",
     "description": "Drive refactors as contained simplification steps.",
     "prompt": "Refactor one contained [UNIT] at a time, prefer deleting duplication before adding new code, and continue until [DONE_CONDITION].",
-    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "placeholders": [
+      "UNIT",
+      "DONE_CONDITION"
+    ],
     "weights": {
       "refactor": 0.98
     }
@@ -134,7 +160,9 @@
     "role": "review",
     "description": "Review safe restructuring against interface stability.",
     "prompt": "Verify the restructure stays contained, removes redundancy before extension, and preserves [STABLE_INTERFACE].",
-    "placeholders": ["STABLE_INTERFACE"],
+    "placeholders": [
+      "STABLE_INTERFACE"
+    ],
     "weights": {
       "refactor": 0.9
     }
@@ -144,7 +172,10 @@
     "role": "execution",
     "description": "Review one claim or risk at a time.",
     "prompt": "Inspect one claim, failure mode, or missing assumption in [UNIT] at a time and continue until [DONE_CONDITION].",
-    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "placeholders": [
+      "UNIT",
+      "DONE_CONDITION"
+    ],
     "weights": {
       "review": 0.85
     }
@@ -154,7 +185,9 @@
     "role": "analysis",
     "description": "Start review work from failure analysis and challenge.",
     "prompt": "Start with failure analysis; identify what is missing, what could be wrong, and which assumptions in [CONTEXT_TARGET] need to be challenged.",
-    "placeholders": ["CONTEXT_TARGET"],
+    "placeholders": [
+      "CONTEXT_TARGET"
+    ],
     "weights": {
       "review": 0.98
     }
@@ -164,7 +197,9 @@
     "role": "review",
     "description": "Force challenge-oriented review output.",
     "prompt": "Challenge the proposed change against [STABLE_INTERFACE], call out missing evidence, and reject weak conclusions.",
-    "placeholders": ["STABLE_INTERFACE"],
+    "placeholders": [
+      "STABLE_INTERFACE"
+    ],
     "weights": {
       "review": 0.98
     }
@@ -174,7 +209,9 @@
     "role": "constraint",
     "description": "Keep test-driven changes focused and production-safe.",
     "prompt": "Keep production changes minimal and do not modify unrelated [SCOPE_ELEMENTS].",
-    "placeholders": ["SCOPE_ELEMENTS"],
+    "placeholders": [
+      "SCOPE_ELEMENTS"
+    ],
     "weights": {
       "tests": 0.9
     }
@@ -184,7 +221,10 @@
     "role": "execution",
     "description": "Require a failing test before the fix.",
     "prompt": "Write or isolate a failing test for [UNIT] first, then make the smallest change and continue until [DONE_CONDITION].",
-    "placeholders": ["UNIT", "DONE_CONDITION"],
+    "placeholders": [
+      "UNIT",
+      "DONE_CONDITION"
+    ],
     "weights": {
       "tests": 0.99
     }
@@ -194,7 +234,9 @@
     "role": "validation",
     "description": "Use tests as proof.",
     "prompt": "Use [VALIDATION] as proof, showing the failing test first and the passing result after the fix.",
-    "placeholders": ["VALIDATION"],
+    "placeholders": [
+      "VALIDATION"
+    ],
     "weights": {
       "tests": 0.99
     }
@@ -204,9 +246,133 @@
     "role": "review",
     "description": "Review whether tests prove stability.",
     "prompt": "Treat tests as proof, and confirm [STABLE_INTERFACE] remains covered by the new or updated test.",
-    "placeholders": ["STABLE_INTERFACE"],
+    "placeholders": [
+      "STABLE_INTERFACE"
+    ],
     "weights": {
       "tests": 0.95
+    }
+  },
+  {
+    "name": "memory_capture_gate",
+    "role": "done",
+    "description": "Force durable memory capture when meaningful understanding emerged.",
+    "prompt": "Do not treat task completion alone as sufficient when work in [CODE_AREA] produced meaningful [LEARNING_TYPE]; complete the memory capture before stopping.",
+    "placeholders": [
+      "CODE_AREA",
+      "LEARNING_TYPE"
+    ],
+    "weights": {
+      "code_discovery": 0.98,
+      "implementation_learning": 0.95,
+      "debugging_digest": 0.97,
+      "claim_update": 0.92,
+      "handoff_memory": 0.9
+    }
+  },
+  {
+    "name": "evidence_first_memory",
+    "role": "analysis",
+    "description": "Require evidence-backed memory capture.",
+    "prompt": "Ground the memory in [EVIDENCE_PATHS] gathered from [DISCOVERY_SCOPE] before writing any durable conclusion.",
+    "placeholders": [
+      "EVIDENCE_PATHS",
+      "DISCOVERY_SCOPE"
+    ],
+    "weights": {
+      "code_discovery": 0.99,
+      "implementation_learning": 0.93,
+      "debugging_digest": 0.99,
+      "architecture_memory": 0.99,
+      "claim_update": 0.98,
+      "handoff_memory": 0.92,
+      "memory_review": 0.99
+    }
+  },
+  {
+    "name": "writeback_required",
+    "role": "output",
+    "description": "Require deterministic repo-local memory write-back details.",
+    "prompt": "Write or update a [MEMORY_KIND] entry in [MEMORY_TARGET_FILE], including [FILES_TOUCHED] and [CONFIDENCE_LEVEL].",
+    "placeholders": [
+      "MEMORY_KIND",
+      "MEMORY_TARGET_FILE",
+      "FILES_TOUCHED",
+      "CONFIDENCE_LEVEL"
+    ],
+    "weights": {
+      "code_discovery": 0.99,
+      "implementation_learning": 0.99,
+      "debugging_digest": 0.99,
+      "architecture_memory": 0.98,
+      "claim_update": 0.99,
+      "handoff_memory": 0.99,
+      "memory_review": 0.97
+    }
+  },
+  {
+    "name": "crystallize_after_work",
+    "role": "execution",
+    "description": "Crystallize the durable learning after work completes.",
+    "prompt": "Crystallize the durable [LEARNING_TYPE] from [CODE_AREA] into a concise reusable memory entry after the work is complete.",
+    "placeholders": [
+      "LEARNING_TYPE",
+      "CODE_AREA"
+    ],
+    "weights": {
+      "code_discovery": 0.97,
+      "implementation_learning": 0.98,
+      "debugging_digest": 0.96
+    }
+  },
+  {
+    "name": "separate_fact_from_hypothesis",
+    "role": "review",
+    "description": "Keep verified facts, revised assumptions, and open questions separate.",
+    "prompt": "Separate verified facts from hypotheses by contrasting [PRIOR_ASSUMPTION] with [UPDATED_ASSUMPTION], and keep [OPEN_QUESTIONS] explicit.",
+    "placeholders": [
+      "PRIOR_ASSUMPTION",
+      "UPDATED_ASSUMPTION",
+      "OPEN_QUESTIONS"
+    ],
+    "weights": {
+      "debugging_digest": 0.98,
+      "architecture_memory": 0.94,
+      "claim_update": 0.99,
+      "handoff_memory": 0.95,
+      "memory_review": 0.98
+    }
+  },
+  {
+    "name": "privacy_redaction_gate",
+    "role": "constraint",
+    "description": "Require privacy-aware redaction before durable write-back.",
+    "prompt": "Before saving durable memory for [HANDOFF_SCOPE], redact secrets, personal data, and transient noise that should not persist.",
+    "placeholders": [
+      "HANDOFF_SCOPE"
+    ],
+    "weights": {
+      "code_discovery": 0.9,
+      "implementation_learning": 0.9,
+      "debugging_digest": 0.92,
+      "handoff_memory": 0.99,
+      "memory_review": 0.97
+    }
+  },
+  {
+    "name": "update_existing_memory_before_creating_new",
+    "role": "analysis",
+    "description": "Prefer updating existing durable memory before adding another note.",
+    "prompt": "Check whether [MEMORY_TARGET_FILE] already contains the relevant [MEMORY_KIND] and update that memory before creating a new entry.",
+    "placeholders": [
+      "MEMORY_TARGET_FILE",
+      "MEMORY_KIND"
+    ],
+    "weights": {
+      "implementation_learning": 0.94,
+      "architecture_memory": 0.98,
+      "claim_update": 0.99,
+      "memory_review": 0.98
     }
   }
 ]

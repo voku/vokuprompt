@@ -146,5 +146,187 @@
       "failing test first",
       "tests as proof"
     ]
+  },
+  {
+    "name": "code_discovery",
+    "description": "Capture durable findings from non-trivial code discovery before stopping.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "privacy_redaction_gate",
+      "evidence_first_memory",
+      "crystallize_after_work",
+      "memory_capture_gate",
+      "writeback_required"
+    ],
+    "focus": [
+      "discovery write-back",
+      "evidence-backed memory"
+    ]
+  },
+  {
+    "name": "implementation_learning",
+    "description": "Capture durable implementation learnings and update existing memory before creating new notes.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "analysis": 2,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "privacy_redaction_gate",
+      "evidence_first_memory",
+      "update_existing_memory_before_creating_new",
+      "crystallize_after_work",
+      "memory_capture_gate",
+      "writeback_required"
+    ],
+    "focus": [
+      "durable implementation learning",
+      "update before append"
+    ]
+  },
+  {
+    "name": "debugging_digest",
+    "description": "Turn debugging work into an evidence-backed digest with clear facts, revisions, and open questions.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "privacy_redaction_gate",
+      "evidence_first_memory",
+      "crystallize_after_work",
+      "separate_fact_from_hypothesis",
+      "memory_capture_gate",
+      "writeback_required"
+    ],
+    "focus": [
+      "debugging evidence",
+      "fact versus hypothesis"
+    ]
+  },
+  {
+    "name": "architecture_memory",
+    "description": "Capture durable architectural understanding with evidence and updates to existing memory.",
+    "role_limits": {
+      "framing": 1,
+      "analysis": 2,
+      "review": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "evidence_first_memory",
+      "update_existing_memory_before_creating_new",
+      "separate_fact_from_hypothesis",
+      "writeback_required"
+    ],
+    "focus": [
+      "architectural understanding",
+      "durable system memory"
+    ]
+  },
+  {
+    "name": "claim_update",
+    "description": "Update a prior claim or assumption with evidence-backed corrections in durable memory.",
+    "role_limits": {
+      "framing": 1,
+      "analysis": 2,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "evidence_first_memory",
+      "update_existing_memory_before_creating_new",
+      "separate_fact_from_hypothesis",
+      "memory_capture_gate",
+      "writeback_required"
+    ],
+    "focus": [
+      "claim correction",
+      "assumption updates"
+    ]
+  },
+  {
+    "name": "handoff_memory",
+    "description": "Produce a redacted handoff memory for the next agent or maintainer with evidence and open questions.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "privacy_redaction_gate",
+      "evidence_first_memory",
+      "separate_fact_from_hypothesis",
+      "memory_capture_gate",
+      "writeback_required"
+    ],
+    "focus": [
+      "handoff quality",
+      "safe write-back"
+    ]
+  },
+  {
+    "name": "memory_review",
+    "description": "Review existing repo-local memory for evidence quality, redaction, and necessary updates.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "analysis": 2,
+      "review": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "privacy_redaction_gate",
+      "evidence_first_memory",
+      "update_existing_memory_before_creating_new",
+      "separate_fact_from_hypothesis",
+      "writeback_required"
+    ],
+    "focus": [
+      "memory quality review",
+      "evidence and redaction"
+    ]
   }
 ]

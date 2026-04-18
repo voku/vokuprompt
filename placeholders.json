@@ -110,5 +110,197 @@
       "existing_repo_build_commands",
       "task_specific_verification_needs"
     ]
+  },
+  {
+    "name": "CODE_AREA",
+    "description": "The concrete subsystem, code path, or file cluster whose new understanding should be captured durably.",
+    "examples": [
+      "the optimizer selection path in internal/engine",
+      "the CLI asset resolution flow in internal/cli"
+    ],
+    "required": true,
+    "resolution": "Fill this with the narrowest code area where meaningful new understanding emerged from the completed work.",
+    "expected_format": "a short noun phrase naming the exact subsystem, runtime path, or file cluster that produced the learning",
+    "preferred_sources": [
+      "files_changed_or_inspected",
+      "task_scope",
+      "post_task_findings"
+    ]
+  },
+  {
+    "name": "FILES_TOUCHED",
+    "description": "The files changed or materially inspected while producing the learning that is being written back.",
+    "examples": [
+      "internal/cli/optimize.go, internal/cli/optimize_test.go",
+      "categories.json, patterns.json, placeholders.json"
+    ],
+    "required": true,
+    "resolution": "List the concrete files that produced or now embody the durable learning, keeping the list tight and reviewable.",
+    "expected_format": "a comma-separated list of repository-relative file paths",
+    "preferred_sources": [
+      "git_diff",
+      "files_opened_during_work",
+      "final_patch_scope"
+    ]
+  },
+  {
+    "name": "DISCOVERY_SCOPE",
+    "description": "The investigation boundary or question that the discovery or memory write-back answers.",
+    "examples": [
+      "how pattern role limits shape optimize output",
+      "why the flaky cache invalidation path fails under retries"
+    ],
+    "required": true,
+    "resolution": "State the exact discovery scope that was investigated so the memory stays bounded to the real question answered.",
+    "expected_format": "one sentence or noun phrase naming the specific discovery question, boundary, or investigation target",
+    "preferred_sources": [
+      "original_task",
+      "investigation_notes",
+      "debugging_scope"
+    ]
+  },
+  {
+    "name": "LEARNING_TYPE",
+    "description": "The kind of durable learning that emerged from the work.",
+    "examples": [
+      "code discovery",
+      "implementation learning"
+    ],
+    "required": true,
+    "resolution": "Choose the most accurate learning type for the write-back, matching the memory-oriented category being executed.",
+    "expected_format": "a short lower-case phrase naming the learning type or memory category",
+    "preferred_sources": [
+      "selected_category",
+      "completed_work_type",
+      "task_outcome"
+    ]
+  },
+  {
+    "name": "EVIDENCE_PATHS",
+    "description": "The specific files, commands, logs, or tests that justify the memory being written.",
+    "examples": [
+      "internal/engine/selection.go and go test ./... -v output",
+      "README.md, skills/vokuprompt/SKILL.md, and the compiled prompt contract tests"
+    ],
+    "required": true,
+    "resolution": "List the concrete evidence sources that support the claimed learning before any memory is updated.",
+    "expected_format": "a concise list of repository paths, commands, or logs that directly justify the memory content",
+    "preferred_sources": [
+      "files_opened_during_work",
+      "validation_output",
+      "debug_logs"
+    ]
+  },
+  {
+    "name": "PRIOR_ASSUMPTION",
+    "description": "The earlier belief, claim, or working assumption that existed before the new evidence was gathered.",
+    "examples": [
+      "the optimizer could silently choose memory categories from intent alone",
+      "the failure was caused by network timing rather than stale cache state"
+    ],
+    "required": true,
+    "resolution": "Capture the prior assumption that is being reviewed, corrected, or preserved so the memory shows what changed.",
+    "expected_format": "one sentence stating the prior belief, claim, or assumption in plain language",
+    "preferred_sources": [
+      "earlier_plan_or_commentary",
+      "previous_memory_entry",
+      "debugging_hypothesis"
+    ]
+  },
+  {
+    "name": "UPDATED_ASSUMPTION",
+    "description": "The corrected or confirmed understanding after reviewing evidence.",
+    "examples": [
+      "memory categories are explicit user- or agent-selected contracts, not auto-detected workflows",
+      "the retry bug comes from stale cache invalidation order, not network timing"
+    ],
+    "required": true,
+    "resolution": "State the updated understanding that should replace or refine the prior assumption in durable memory.",
+    "expected_format": "one sentence stating the corrected or confirmed understanding",
+    "preferred_sources": [
+      "current_evidence",
+      "final_patch_rationale",
+      "post_task_conclusion"
+    ]
+  },
+  {
+    "name": "MEMORY_KIND",
+    "description": "The type of repo-local memory entry that should be written or updated.",
+    "examples": [
+      "debugging digest",
+      "architecture memory"
+    ],
+    "required": true,
+    "resolution": "Name the durable memory artifact being updated, aligned with the selected category and the kind of understanding captured.",
+    "expected_format": "a short noun phrase naming the memory entry type",
+    "preferred_sources": [
+      "selected_category",
+      "team_memory_conventions",
+      "task_outcome"
+    ]
+  },
+  {
+    "name": "MEMORY_TARGET_FILE",
+    "description": "The repo-local file where the durable memory should be written or updated.",
+    "examples": [
+      ".copilot/memory/architecture.md",
+      "docs/agent-memory/debugging.md"
+    ],
+    "required": true,
+    "resolution": "Point to the existing repo-local memory file to update, or the agreed repo-local target file if a new durable note is warranted.",
+    "expected_format": "one repository-relative file path for the repo-local memory store",
+    "preferred_sources": [
+      "repo_local_memory_store",
+      "existing_memory_files",
+      "task_instructions"
+    ]
+  },
+  {
+    "name": "CONFIDENCE_LEVEL",
+    "description": "The confidence attached to the memory write-back based on the available evidence.",
+    "examples": [
+      "high: validated by tests and direct code inspection",
+      "medium: code inspection complete, but runtime reproduction still pending"
+    ],
+    "required": true,
+    "resolution": "State a concise confidence level tied to the evidence quality and any remaining uncertainty.",
+    "expected_format": "a short confidence label plus brief justification",
+    "preferred_sources": [
+      "validation_output",
+      "evidence_quality",
+      "remaining_risks"
+    ]
+  },
+  {
+    "name": "OPEN_QUESTIONS",
+    "description": "The unresolved questions or follow-ups that should remain explicitly open after the memory write-back.",
+    "examples": [
+      "whether the same selection edge case exists in future category bundles",
+      "whether the flaky path can be reproduced under race-enabled CI"
+    ],
+    "required": true,
+    "resolution": "List only the unresolved questions that still matter after the new learning is saved, and keep them separate from verified facts.",
+    "expected_format": "a short list or one sentence naming the remaining unknowns or follow-up questions",
+    "preferred_sources": [
+      "remaining_debugging_unknowns",
+      "review_notes",
+      "follow_up_risks"
+    ]
+  },
+  {
+    "name": "HANDOFF_SCOPE",
+    "description": "The downstream audience, next-task boundary, or handoff scope that the memory should safely support.",
+    "examples": [
+      "the next agent continuing optimize contract work",
+      "the maintainer reviewing the architecture note before the next refactor"
+    ],
+    "required": true,
+    "resolution": "Describe who or what future work this durable memory is meant to help so the write-back stays focused and safely scoped.",
+    "expected_format": "one sentence or noun phrase naming the downstream user, next task, or handoff boundary",
+    "preferred_sources": [
+      "task_handoff_needs",
+      "next_agent_scope",
+      "review_audience"
+    ]
   }
 ]

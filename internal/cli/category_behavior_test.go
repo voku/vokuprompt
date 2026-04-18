@@ -20,6 +20,7 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 		category         string
 		wantPatterns     []string
 		wantPromptPieces []string
+		wantPlaceholders []string
 	}{
 		{
 			category:     "performance",
@@ -29,6 +30,7 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 				"realistic benchmarks",
 				"benchmark-backed",
 			},
+			wantPlaceholders: []string{"SCOPE_ELEMENTS", "UNIT", "DONE_CONDITION", "VALIDATION", "STABLE_INTERFACE"},
 		},
 		{
 			category:     "refactor",
@@ -38,6 +40,7 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 				"contained",
 				"deleting duplication before adding new code",
 			},
+			wantPlaceholders: []string{"SCOPE_ELEMENTS", "UNIT", "DONE_CONDITION", "STABLE_INTERFACE"},
 		},
 		{
 			category:     "review",
@@ -47,6 +50,7 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 				"missing",
 				"challenged",
 			},
+			wantPlaceholders: []string{"UNIT", "DONE_CONDITION", "CONTEXT_TARGET", "STABLE_INTERFACE"},
 		},
 		{
 			category:     "tests",
@@ -56,6 +60,41 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 				"Use [VALIDATION] as proof",
 				"Treat tests as proof",
 			},
+			wantPlaceholders: []string{"SCOPE_ELEMENTS", "UNIT", "DONE_CONDITION", "VALIDATION", "STABLE_INTERFACE"},
+		},
+		{
+			category:     "code_discovery",
+			wantPatterns: []string{"privacy_redaction_gate", "evidence_first_memory", "crystallize_after_work", "memory_capture_gate", "writeback_required"},
+			wantPromptPieces: []string{
+				"Ground the memory in [EVIDENCE_PATHS]",
+				"Crystallize the durable [LEARNING_TYPE] from [CODE_AREA]",
+				"Do not treat task completion alone as sufficient",
+				"Write or update a [MEMORY_KIND] entry",
+			},
+			wantPlaceholders: []string{"HANDOFF_SCOPE", "EVIDENCE_PATHS", "DISCOVERY_SCOPE", "LEARNING_TYPE", "CODE_AREA", "MEMORY_KIND", "MEMORY_TARGET_FILE", "FILES_TOUCHED", "CONFIDENCE_LEVEL"},
+		},
+		{
+			category:     "debugging_digest",
+			wantPatterns: []string{"privacy_redaction_gate", "evidence_first_memory", "crystallize_after_work", "separate_fact_from_hypothesis", "memory_capture_gate", "writeback_required"},
+			wantPromptPieces: []string{
+				"Ground the memory in [EVIDENCE_PATHS]",
+				"Separate verified facts from hypotheses",
+				"[PRIOR_ASSUMPTION]",
+				"[UPDATED_ASSUMPTION]",
+				"[OPEN_QUESTIONS]",
+			},
+			wantPlaceholders: []string{"HANDOFF_SCOPE", "EVIDENCE_PATHS", "DISCOVERY_SCOPE", "LEARNING_TYPE", "CODE_AREA", "PRIOR_ASSUMPTION", "UPDATED_ASSUMPTION", "OPEN_QUESTIONS", "MEMORY_KIND", "MEMORY_TARGET_FILE", "FILES_TOUCHED", "CONFIDENCE_LEVEL"},
+		},
+		{
+			category:     "claim_update",
+			wantPatterns: []string{"evidence_first_memory", "update_existing_memory_before_creating_new", "separate_fact_from_hypothesis", "memory_capture_gate", "writeback_required"},
+			wantPromptPieces: []string{
+				"Ground the memory in [EVIDENCE_PATHS]",
+				"update that memory before creating a new entry",
+				"Separate verified facts from hypotheses",
+				"Do not treat task completion alone as sufficient",
+			},
+			wantPlaceholders: []string{"EVIDENCE_PATHS", "DISCOVERY_SCOPE", "MEMORY_TARGET_FILE", "MEMORY_KIND", "PRIOR_ASSUMPTION", "UPDATED_ASSUMPTION", "OPEN_QUESTIONS", "CODE_AREA", "LEARNING_TYPE", "FILES_TOUCHED", "CONFIDENCE_LEVEL"},
 		},
 	}
 
@@ -80,6 +119,15 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 		for _, fragment := range tc.wantPromptPieces {
 			if !strings.Contains(resp.CompiledPrompt, fragment) {
 				t.Fatalf("%s compiled_prompt missing %q\n%s", tc.category, fragment, resp.CompiledPrompt)
+			}
+		}
+		manifestNames := make([]string, 0, len(resp.PlaceholderManifest))
+		for _, entry := range resp.PlaceholderManifest {
+			manifestNames = append(manifestNames, entry.Name)
+		}
+		for _, name := range tc.wantPlaceholders {
+			if !slices.Contains(manifestNames, name) {
+				t.Fatalf("%s placeholder_manifest = %v, want %q", tc.category, manifestNames, name)
 			}
 		}
 		// review: Analysis section must appear before Validation so the prompt reads
@@ -128,7 +176,20 @@ func TestExecuteCategories_RealConfigListsNewCategories(t *testing.T) {
 		got = append(got, category.Name)
 	}
 
-	want := []string{"bugfix", "performance", "refactor", "review", "tests"}
+	want := []string{
+		"bugfix",
+		"performance",
+		"refactor",
+		"review",
+		"tests",
+		"code_discovery",
+		"implementation_learning",
+		"debugging_digest",
+		"architecture_memory",
+		"claim_update",
+		"handoff_memory",
+		"memory_review",
+	}
 	if !slices.Equal(got, want) {
 		t.Fatalf("categories = %v, want %v", got, want)
 	}
