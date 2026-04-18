@@ -56,3 +56,44 @@ jobs:
             dist/vokuprompt-linux-amd64.tar.gz
             dist/vokuprompt-linux-amd64.tar.gz.sha256
           retention-days: 90
+
+      - name: Prepare published bundle page
+        run: |
+          cat > dist/index.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>vokuprompt install bundle</title>
+            </head>
+            <body>
+              <h1>vokuprompt install bundle</h1>
+              <ul>
+                <li><a href="./vokuprompt-linux-amd64.tar.gz">Download Linux amd64 bundle</a></li>
+                <li><a href="./vokuprompt-linux-amd64.tar.gz.sha256">Download SHA-256 checksum</a></li>
+              </ul>
+            </body>
+          </html>
+          EOF
+
+      - name: Upload published bundle
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publish:
+    name: Publish installable bundle
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

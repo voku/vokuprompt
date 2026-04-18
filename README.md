@@ -2,6 +2,24 @@
 
 `vokuprompt` turns a weak task request into a compiled prompt contract for a coding agent.
 
+## Quick Start
+
+Get the latest published Linux bundle:
+
+```bash
+curl -fsSL https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz -o /tmp/vokuprompt-linux-amd64.tar.gz
+curl -fsSL https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz.sha256 -o /tmp/vokuprompt-linux-amd64.tar.gz.sha256
+(cd /tmp && sha256sum -c vokuprompt-linux-amd64.tar.gz.sha256)
+mkdir -p /tmp/vokuprompt
+tar -xzf /tmp/vokuprompt-linux-amd64.tar.gz -C /tmp/vokuprompt
+/tmp/vokuprompt/vokuprompt-linux-amd64/vokuprompt categories
+```
+
+Published bundle links:
+
+- Linux bundle: https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz
+- SHA-256: https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz.sha256
+
 ## What vokuprompt is
 
 - A deterministic compiler: the caller fetches categories, chooses one, and `vokuprompt` compiles the matching prompt contract.
@@ -26,7 +44,7 @@ go test ./... -v
 go build ./cmd/vokuprompt
 ```
 
-The latest installable GitHub Actions bundle is published by the `Build Artifact` workflow on `main`.
+The latest installable GitHub Actions bundle is published by the `Build Artifact` workflow on `main` and mirrored to GitHub Pages for a stable download URL.
 It contains:
 
 - the `vokuprompt` Linux binary
@@ -44,7 +62,7 @@ go run ./cmd/vokuprompt optimize --category bugfix
 
 ## Copy-paste prompt for Copilot setup steps
 
-If you want another coding-agent repository to preload `vokuprompt` from the latest build artifact, give the agent this prompt:
+If you want another coding-agent repository to preload `vokuprompt` from the published bundle, give the agent this prompt:
 
 ```text
 Add a `.github/workflows/copilot-setup-steps.yml` workflow for GitHub Copilot cloud agent.
@@ -52,7 +70,7 @@ Add a `.github/workflows/copilot-setup-steps.yml` workflow for GitHub Copilot cl
 Requirements:
 - Use a single `copilot-setup-steps` job on `ubuntu-latest`.
 - Use least-privilege permissions, including `actions: read` and `contents: read`.
-- Download the latest successful `vokuprompt-linux-amd64` artifact from the `Build Artifact` workflow in `voku/vokuprompt` on the `main` branch.
+- Download `https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz`.
 - Extract the tarball into `/usr/local/share/vokuprompt`.
 - Keep the binary at `/usr/local/share/vokuprompt/vokuprompt`, make it executable, and symlink `/usr/local/bin/vokuprompt` to it.
 - Keep `categories.json`, `patterns.json`, `placeholders.json`, and `skills/vokuprompt/SKILL.md` under `/usr/local/share/vokuprompt`.

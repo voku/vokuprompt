@@ -135,6 +135,9 @@ func TestReadme_DescribesPublicOnboarding(t *testing.T) {
 	doc := string(data)
 	for _, fragment := range []string{
 		"# vokuprompt",
+		"Quick Start",
+		"https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz",
+		"https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz.sha256",
 		"What vokuprompt is",
 		"What vokuprompt is not",
 		"Installation / Build",
