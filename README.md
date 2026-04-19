@@ -9,9 +9,10 @@ Get the latest published Linux bundle:
 ```bash
 curl -fsSL https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz -o /tmp/vokuprompt-linux-amd64.tar.gz
 curl -fsSL https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz.sha256 -o /tmp/vokuprompt-linux-amd64.tar.gz.sha256
-(cd /tmp && sha256sum -c vokuprompt-linux-amd64.tar.gz.sha256)
+(cd /tmp && sed 's#  dist/#  #' vokuprompt-linux-amd64.tar.gz.sha256 | sha256sum -c -)
 mkdir -p /tmp/vokuprompt
 tar -xzf /tmp/vokuprompt-linux-amd64.tar.gz -C /tmp/vokuprompt
+test -f /tmp/vokuprompt/vokuprompt-linux-amd64/skills/vokuprompt/SKILL.md
 /tmp/vokuprompt/vokuprompt-linux-amd64/vokuprompt categories
 ```
 
