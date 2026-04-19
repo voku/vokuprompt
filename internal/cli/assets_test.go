@@ -138,6 +138,8 @@ func TestReadme_DescribesPublicOnboarding(t *testing.T) {
 		"Quick Start",
 		"https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz",
 		"https://voku.github.io/vokuprompt/vokuprompt-linux-amd64.tar.gz.sha256",
+		"sed 's#  dist/#  #' vokuprompt-linux-amd64.tar.gz.sha256 | sha256sum -c -",
+		"test -f /tmp/vokuprompt/vokuprompt-linux-amd64/skills/vokuprompt/SKILL.md",
 		"What vokuprompt is",
 		"What vokuprompt is not",
 		"Installation / Build",
