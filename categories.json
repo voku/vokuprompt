@@ -148,6 +148,36 @@
     ]
   },
   {
+    "name": "operational_contract",
+    "description": "Execute as a multi-pass operational contract with missingness checks, verification loops, and explicit continuation.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "analysis": 1,
+      "validation": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "ask_before_assume",
+      "multi_pass_workflow",
+      "missingness_detection",
+      "continuation_rule",
+      "verification_prompt",
+      "double_check"
+    ],
+    "focus": [
+      "multi-pass execution",
+      "ask-before-assume",
+      "explicit continuation"
+    ]
+  },
+  {
     "name": "code_discovery",
     "description": "Capture durable findings from non-trivial code discovery before stopping.",
     "role_limits": {

@@ -63,6 +63,18 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 			wantPlaceholders: []string{"SCOPE_ELEMENTS", "UNIT", "DONE_CONDITION", "VALIDATION", "STABLE_INTERFACE"},
 		},
 		{
+			category:     "operational_contract",
+			wantPatterns: []string{"ask_before_assume", "multi_pass_workflow", "missingness_detection", "continuation_rule", "verification_prompt", "double_check"},
+			wantPromptPieces: []string{
+				"Do not invent context",
+				"named passes",
+				"[PASS_DEFINITIONS]",
+				"missing edge cases",
+				"Do not stop early",
+			},
+			wantPlaceholders: []string{"CONTEXT_TARGET", "PASS_DEFINITIONS", "DONE_CONDITION", "VALIDATION", "STABLE_INTERFACE"},
+		},
+		{
 			category:     "code_discovery",
 			wantPatterns: []string{"privacy_redaction_gate", "evidence_first_memory", "crystallize_after_work", "memory_capture_gate", "writeback_required"},
 			wantPromptPieces: []string{
@@ -182,6 +194,7 @@ func TestExecuteCategories_RealConfigListsNewCategories(t *testing.T) {
 		"refactor",
 		"review",
 		"tests",
+		"operational_contract",
 		"code_discovery",
 		"implementation_learning",
 		"debugging_digest",

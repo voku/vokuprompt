@@ -60,6 +60,7 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 
 	wantNames := []string{
 		"bugfix-flow.json",
+		"operational-contract-flow.json",
 		"performance-flow.json",
 		"refactor-flow.json",
 		"review-flow.json",
