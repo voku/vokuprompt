@@ -111,6 +111,10 @@ Example output:
     {
       "name": "tests",
       "description": "Drive the task with a failing test first and use tests as proof."
+    },
+    {
+      "name": "operational_contract",
+      "description": "Execute as a multi-pass operational contract with missingness checks, verification loops, and explicit continuation."
     }
   ]
 }

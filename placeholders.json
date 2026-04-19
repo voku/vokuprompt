@@ -1,5 +1,21 @@
 [
   {
+    "name": "PASS_DEFINITIONS",
+    "description": "The ordered set of named execution passes that structure the agent's work.",
+    "examples": [
+      "Pass 1 — analysis: identify root cause; Pass 2 — implementation: minimal patch; Pass 3 — verification: run tests; Pass 4 — review: double-check assumptions",
+      "analysis → tdd → fix → verification → review"
+    ],
+    "required": true,
+    "resolution": "List the named passes in execution order, each with a one-line description of what the agent should do in that pass.",
+    "expected_format": "an ordered list of pass names and their one-line description, separated by semicolons",
+    "preferred_sources": [
+      "task_type",
+      "done_condition",
+      "verification_strategy"
+    ]
+  },
+  {
     "name": "CONTEXT_TARGET",
     "description": "The concrete codebase area, subsystem, file set, or runtime context that frames the task.",
     "examples": [

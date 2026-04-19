@@ -254,6 +254,55 @@
     }
   },
   {
+    "name": "multi_pass_workflow",
+    "role": "execution",
+    "description": "Drive work as named passes with verification between each pass.",
+    "prompt": "Execute in named passes: [PASS_DEFINITIONS]. Verify after each pass before continuing and continue automatically until [DONE_CONDITION].",
+    "placeholders": [
+      "PASS_DEFINITIONS",
+      "DONE_CONDITION"
+    ],
+    "weights": {
+      "operational_contract": 0.99
+    }
+  },
+  {
+    "name": "ask_before_assume",
+    "role": "constraint",
+    "description": "Prevent hallucination by requiring explicit stop-and-ask when context cannot be resolved.",
+    "prompt": "Do not invent context; if required inputs cannot be resolved from [CONTEXT_TARGET], stop and ask before proceeding.",
+    "placeholders": [
+      "CONTEXT_TARGET"
+    ],
+    "weights": {
+      "operational_contract": 0.95
+    }
+  },
+  {
+    "name": "missingness_detection",
+    "role": "analysis",
+    "description": "Require explicit missingness check before each implementation pass.",
+    "prompt": "Before implementing, identify missing edge cases, undocumented assumptions, and unresolved inputs in [CONTEXT_TARGET].",
+    "placeholders": [
+      "CONTEXT_TARGET"
+    ],
+    "weights": {
+      "operational_contract": 0.92
+    }
+  },
+  {
+    "name": "continuation_rule",
+    "role": "done",
+    "description": "Require explicit continuation through all passes until the done condition is met.",
+    "prompt": "Do not stop early; continue through all passes until [DONE_CONDITION] is met.",
+    "placeholders": [
+      "DONE_CONDITION"
+    ],
+    "weights": {
+      "operational_contract": 0.99
+    }
+  },
+  {
     "name": "memory_capture_gate",
     "role": "done",
     "description": "Force durable memory capture when meaningful understanding emerged.",

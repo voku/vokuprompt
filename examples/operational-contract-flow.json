@@ -1,0 +1,84 @@
+{
+  "name": "operational-contract-flow",
+  "original_weak_prompt": "fix the concurrency bug and make sure it won't regress",
+  "chosen_category": "operational_contract",
+  "optimize_command": "vokuprompt optimize --category operational_contract",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Do not invent context; if required inputs cannot be resolved from [CONTEXT_TARGET], stop and ask before proceeding.\n\nExecution:\n- Execute in named passes: [PASS_DEFINITIONS]. Verify after each pass before continuing and continue automatically until [DONE_CONDITION].\n\nAnalysis:\n- Before implementing, identify missing edge cases, undocumented assumptions, and unresolved inputs in [CONTEXT_TARGET].\n\nValidation:\n- Run [VALIDATION] and show raw output.\n\nReview:\n- Double-check the minimal patch and validate [STABLE_INTERFACE] remains unchanged.\n\nDone when:\nDo not stop early; continue through all passes until [DONE_CONDITION] is met.",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Analysis",
+        "Constraints",
+        "Framing"
+      ],
+      "source_patterns": [
+        "ask_before_assume",
+        "goal_context_constraints_done",
+        "missingness_detection"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Done",
+        "Execution"
+      ],
+      "source_patterns": [
+        "continuation_rule",
+        "multi_pass_workflow"
+      ]
+    },
+    {
+      "name": "PASS_DEFINITIONS",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "multi_pass_workflow"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "double_check"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "verification_prompt"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "CONTEXT_TARGET": "src/Domain/UserAccountService.php and tests/Unit/UserAccountServiceTest.php",
+    "DONE_CONDITION": "the regression test passes, all existing tests pass, and PHPStan max passes with raw output shown",
+    "PASS_DEFINITIONS": "Pass 1 — analysis: identify root cause and affected code paths; Pass 2 — TDD: add a failing regression test; Pass 3 — fix: implement the minimal patch; Pass 4 — verification: run PHPUnit and PHPStan max; Pass 5 — review: list unnecessary changes, risky assumptions, and missing edge cases",
+    "STABLE_INTERFACE": "the public API of UserAccountService and all existing passing tests",
+    "TASK": "Fix the concurrency bug in UserAccountService causing concurrent balance updates with a minimal patch and prove it with a regression test.",
+    "VALIDATION": "php vendor/bin/phpunit && php vendor/bin/phpstan analyse --level max"
+  },
+  "final_agent_handoff": "Goal:\nFix the concurrency bug in UserAccountService causing concurrent balance updates with a minimal patch and prove it with a regression test.\n\nContext:\nsrc/Domain/UserAccountService.php and tests/Unit/UserAccountServiceTest.php\n\nConstraints:\n- Do not invent context; if required inputs cannot be resolved from src/Domain/UserAccountService.php and tests/Unit/UserAccountServiceTest.php, stop and ask before proceeding.\n\nExecution:\n- Execute in named passes: Pass 1 — analysis: identify root cause and affected code paths; Pass 2 — TDD: add a failing regression test; Pass 3 — fix: implement the minimal patch; Pass 4 — verification: run PHPUnit and PHPStan max; Pass 5 — review: list unnecessary changes, risky assumptions, and missing edge cases. Verify after each pass before continuing and continue automatically until the regression test passes, all existing tests pass, and PHPStan max passes with raw output shown.\n\nAnalysis:\n- Before implementing, identify missing edge cases, undocumented assumptions, and unresolved inputs in src/Domain/UserAccountService.php and tests/Unit/UserAccountServiceTest.php.\n\nValidation:\n- Run php vendor/bin/phpunit && php vendor/bin/phpstan analyse --level max and show raw output.\n\nReview:\n- Double-check the minimal patch and validate the public API of UserAccountService and all existing passing tests remains unchanged.\n\nDone when:\nDo not stop early; continue through all passes until the regression test passes, all existing tests pass, and PHPStan max passes with raw output shown is met.\n\nTreat the selected category as fixed input chosen from the deterministic category registry.\n1. Use placeholder_manifest as the source of truth for which placeholders must be resolved now.\n2. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.\n3. Keep the selected category and compiled structure intact; do not silently rewrite the contract.\n4. If a required placeholder cannot be resolved safely, stop and ask for the missing input.\n5. After placeholder resolution, execute the final prompt.\n\nReturn:\n1. category confirmation\n2. placeholder resolution summary\n3. final executable prompt\n4. execution result"
+}

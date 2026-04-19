@@ -11,6 +11,7 @@ Use `vokuprompt` to turn a weak task request into a compiled prompt contract for
    - `refactor` for safe restructuring, containment, and deletion-before-extension.
    - `review` for failure analysis, missing evidence, and challenge-oriented critique.
    - `tests` for failing-test-first work where tests are the proof.
+   - `operational_contract` for multi-pass execution contracts with missingness checks, ask-before-assume guards, and explicit continuation rules.
    - `code_discovery`, `implementation_learning`, `debugging_digest`, `architecture_memory`, `claim_update`, `handoff_memory`, or `memory_review` when the task produced durable understanding that must be written back.
 3. Run `vokuprompt optimize --category bugfix` (or another listed category).
 4. Inspect the returned `compiled_prompt`, `placeholder_manifest`, and `execution_request` so you know both the prompt contract and the meta prompt for placeholder resolution and execution.
