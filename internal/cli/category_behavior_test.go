@@ -57,6 +57,7 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 			wantPatterns: []string{"tests_scope", "tests_loop", "tests_validation", "tests_review"},
 			wantPromptPieces: []string{
 				"failing test",
+				"discover regressions",
 				"Use [VALIDATION] as proof",
 				"Treat tests as proof",
 			},
