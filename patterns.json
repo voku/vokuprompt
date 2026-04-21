@@ -36,7 +36,7 @@
     "name": "step_loop",
     "role": "execution",
     "description": "Execute in deterministic steps until done.",
-    "prompt": "Work step by step over [UNIT] and continue until [DONE_CONDITION].",
+    "prompt": "Good starting point; treat it as the bare minimum, work step by step over [UNIT], and continue until you have reached the point of [DONE_CONDITION].",
     "placeholders": [
       "UNIT",
       "DONE_CONDITION"
@@ -220,7 +220,7 @@
     "name": "tests_loop",
     "role": "execution",
     "description": "Require a failing test before the fix.",
-    "prompt": "Write or isolate a failing test for [UNIT] first, then make the smallest change and continue until [DONE_CONDITION].",
+    "prompt": "Write or isolate a failing test for [UNIT] first, add more tests in a TDD way so they discover regressions instead of only covering the happy path, then make the smallest change and continue until [DONE_CONDITION].",
     "placeholders": [
       "UNIT",
       "DONE_CONDITION"

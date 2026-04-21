@@ -72,7 +72,7 @@ Constraints:
 - Do not modify unrelated [SCOPE_ELEMENTS].
 
 Execution:
-- Work step by step over [UNIT] and continue until [DONE_CONDITION].
+- Good starting point; treat it as the bare minimum, work step by step over [UNIT], and continue until you have reached the point of [DONE_CONDITION].
 
 Validation:
 - Run [VALIDATION] and show raw output.
@@ -104,7 +104,7 @@ Constraints:
 - Do not modify unrelated commands, repo docs outside the task, or engine selection behavior.
 
 Execution:
-- Work step by step over one failing contract check, then the minimal code change, then rerun tests and continue until go test ./... -v passes and the optimize JSON contract includes the new field.
+- Good starting point; treat it as the bare minimum, work step by step over one failing contract check, then the minimal code change, then rerun tests, and continue until you have reached the point of go test ./... -v passes and the optimize JSON contract includes the new field.
 
 Validation:
 - Run go test ./... -v and show raw output.
