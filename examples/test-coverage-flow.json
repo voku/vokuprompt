@@ -1,0 +1,119 @@
+{
+  "name": "test-coverage-flow",
+  "original_weak_prompt": "increase the test coverage for at least 5% and if your new tests didn't find any regressions, your tests are shit",
+  "chosen_category": "test_coverage",
+  "optimize_command": "vokuprompt optimize --category test_coverage",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Increase coverage in [COVERAGE_SCOPE] by at least [COVERAGE_THRESHOLD]; do not modify unrelated [SCOPE_ELEMENTS], and do not accept tests that only add line hits without asserting real behavior.\n\nExecution:\n- Measure the current coverage in [COVERAGE_SCOPE] first, then add one [UNIT] at a time that targets an uncovered behavioral path—each new test must be able to fail on a realistic regression, not just reach a line—and continue until [DONE_CONDITION].\n\nValidation:\n- Run [VALIDATION], show the before and after coverage delta for [COVERAGE_SCOPE], and confirm that at least one new test fails when the behavior it targets is removed or broken; a suite that only adds coverage without ever catching a regression is not acceptable.\n\nReview:\n- Confirm coverage in [COVERAGE_SCOPE] increased by at least [COVERAGE_THRESHOLD] and that [STABLE_INTERFACE] is still covered; reject any new test that cannot detect at least one realistic regression—tests that only inflate coverage without proving behavioral correctness must be rewritten or removed.",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "COVERAGE_SCOPE",
+      "required": true,
+      "node_types": [
+        "Constraints",
+        "Execution",
+        "Review",
+        "Validation"
+      ],
+      "source_patterns": [
+        "coverage_loop",
+        "coverage_review",
+        "coverage_scope",
+        "coverage_validation"
+      ]
+    },
+    {
+      "name": "COVERAGE_THRESHOLD",
+      "required": true,
+      "node_types": [
+        "Constraints",
+        "Review"
+      ],
+      "source_patterns": [
+        "coverage_review",
+        "coverage_scope"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "coverage_loop"
+      ]
+    },
+    {
+      "name": "SCOPE_ELEMENTS",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "coverage_scope"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "coverage_review"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "UNIT",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "coverage_loop"
+      ]
+    },
+    {
+      "name": "VALIDATION",
+      "required": true,
+      "node_types": [
+        "Validation"
+      ],
+      "source_patterns": [
+        "coverage_validation"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "CONTEXT_TARGET": "the engine selection and pattern-weighting paths in internal/engine, currently at ~62% coverage",
+    "COVERAGE_SCOPE": "internal/engine",
+    "COVERAGE_THRESHOLD": "5%",
+    "DONE_CONDITION": "go test ./... -cover shows internal/engine coverage ≥ 67% and at least one new test fails when a targeted branch is removed",
+    "SCOPE_ELEMENTS": "packages, CLI surface, JSON fixture files, and example flows",
+    "STABLE_INTERFACE": "the optimize JSON contract, category registry shape, and existing CLI flag behavior",
+    "TASK": "Increase test coverage in internal/engine by at least 5 percentage points while ensuring every new test can detect a realistic regression.",
+    "UNIT": "uncovered behavioral branch or error path",
+    "VALIDATION": "go test ./... -cover -coverprofile=coverage.out && go tool cover -func=coverage.out"
+  },
+  "final_agent_handoff": "Goal:\nIncrease test coverage in internal/engine by at least 5 percentage points while ensuring every new test can detect a realistic regression.\n\nContext:\nthe engine selection and pattern-weighting paths in internal/engine, currently at ~62% coverage\n\nConstraints:\n- Increase coverage in internal/engine by at least 5%; do not modify unrelated packages, CLI surface, JSON fixture files, and example flows, and do not accept tests that only add line hits without asserting real behavior.\n\nExecution:\n- Measure the current coverage in internal/engine first, then add one uncovered behavioral branch or error path at a time that targets an uncovered behavioral path—each new test must be able to fail on a realistic regression, not just reach a line—and continue until go test ./... -cover shows internal/engine coverage ≥ 67% and at least one new test fails when a targeted branch is removed.\n\nValidation:\n- Run go test ./... -cover -coverprofile=coverage.out && go tool cover -func=coverage.out, show the before and after coverage delta for internal/engine, and confirm that at least one new test fails when the behavior it targets is removed or broken; a suite that only adds coverage without ever catching a regression is not acceptable.\n\nReview:\n- Confirm coverage in internal/engine increased by at least 5% and that the optimize JSON contract, category registry shape, and existing CLI flag behavior is still covered; reject any new test that cannot detect at least one realistic regression—tests that only inflate coverage without proving behavioral correctness must be rewritten or removed.\n\nTreat the selected category as fixed input chosen from the deterministic category registry.\n1. Use placeholder_manifest as the source of truth for which placeholders must be resolved now.\n2. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.\n3. Keep the selected category and compiled structure intact; do not silently rewrite the contract.\n4. If a required placeholder cannot be resolved safely, stop and ask for the missing input.\n5. After placeholder resolution, execute the final prompt.\n\nReturn:\n1. category confirmation\n2. placeholder resolution summary\n3. final executable prompt\n4. execution result"
+}

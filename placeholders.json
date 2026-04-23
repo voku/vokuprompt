@@ -304,6 +304,40 @@
     ]
   },
   {
+    "name": "COVERAGE_THRESHOLD",
+    "description": "The minimum percentage-point increase in test coverage that must be achieved.",
+    "examples": [
+      "5%",
+      "10 percentage points",
+      "at least 8%"
+    ],
+    "required": true,
+    "resolution": "Use the percentage or point target from the user request, defaulting to 5% if none is specified.",
+    "expected_format": "a short numeric string with a percent sign or the phrase 'percentage points' (e.g., '5%')",
+    "preferred_sources": [
+      "user_request",
+      "team_coverage_policy",
+      "existing_coverage_targets"
+    ]
+  },
+  {
+    "name": "COVERAGE_SCOPE",
+    "description": "The package, module, directory, or file set where coverage must be measured and improved.",
+    "examples": [
+      "internal/engine",
+      "the parser package at internal/ast",
+      "all files under pkg/auth"
+    ],
+    "required": true,
+    "resolution": "Fill with the narrowest package or file cluster where coverage improvement is required.",
+    "expected_format": "a short noun phrase naming the exact package path, directory, or file cluster",
+    "preferred_sources": [
+      "user_request",
+      "current_repo_context",
+      "coverage_report_output"
+    ]
+  },
+  {
     "name": "HANDOFF_SCOPE",
     "description": "The downstream audience, next-task boundary, or handoff scope that the memory should safely support.",
     "examples": [
