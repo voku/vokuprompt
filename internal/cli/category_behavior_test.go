@@ -195,6 +195,7 @@ func TestExecuteCategories_RealConfigListsNewCategories(t *testing.T) {
 		"refactor",
 		"review",
 		"tests",
+		"test_coverage",
 		"operational_contract",
 		"code_discovery",
 		"implementation_learning",

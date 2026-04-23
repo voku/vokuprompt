@@ -148,6 +148,36 @@
     ]
   },
   {
+    "name": "test_coverage",
+    "description": "Increase test coverage by a target threshold while ensuring every new test can catch a real regression.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "validation": 1,
+      "analysis": 1,
+      "review": 1,
+      "done": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "coverage_scope",
+      "coverage_loop",
+      "coverage_validation",
+      "coverage_review",
+      "scope_containment",
+      "verification_prompt",
+      "double_check"
+    ],
+    "focus": [
+      "coverage threshold",
+      "regression-detecting tests"
+    ]
+  },
+  {
     "name": "operational_contract",
     "description": "Execute as a multi-pass operational contract with missingness checks, verification loops, and explicit continuation.",
     "role_limits": {

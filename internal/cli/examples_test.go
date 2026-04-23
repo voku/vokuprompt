@@ -64,6 +64,7 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 		"performance-flow.json",
 		"refactor-flow.json",
 		"review-flow.json",
+		"test-coverage-flow.json",
 		"tests-flow.json",
 	}
 	if !slices.Equal(names, wantNames) {

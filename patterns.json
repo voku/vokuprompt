@@ -423,5 +423,60 @@
       "claim_update": 0.99,
       "memory_review": 0.98
     }
+  },
+  {
+    "name": "coverage_scope",
+    "role": "constraint",
+    "description": "Require a minimum coverage increase in a defined scope and block hollow coverage-only tests.",
+    "prompt": "Increase coverage in [COVERAGE_SCOPE] by at least [COVERAGE_THRESHOLD]; do not modify unrelated [SCOPE_ELEMENTS], and do not accept tests that only add line hits without asserting real behavior.",
+    "placeholders": [
+      "COVERAGE_SCOPE",
+      "COVERAGE_THRESHOLD",
+      "SCOPE_ELEMENTS"
+    ],
+    "weights": {
+      "test_coverage": 0.99
+    }
+  },
+  {
+    "name": "coverage_loop",
+    "role": "execution",
+    "description": "Drive coverage improvement by targeting meaningful behavioral paths, not just line counts.",
+    "prompt": "Measure the current coverage in [COVERAGE_SCOPE] first, then add one [UNIT] at a time that targets an uncovered behavioral path—each new test must be able to fail on a realistic regression, not just reach a line—and continue until [DONE_CONDITION].",
+    "placeholders": [
+      "COVERAGE_SCOPE",
+      "UNIT",
+      "DONE_CONDITION"
+    ],
+    "weights": {
+      "test_coverage": 0.99
+    }
+  },
+  {
+    "name": "coverage_validation",
+    "role": "validation",
+    "description": "Validate coverage delta and confirm new tests can catch regressions.",
+    "prompt": "Run [VALIDATION], show the before and after coverage delta for [COVERAGE_SCOPE], and confirm that at least one new test fails when the behavior it targets is removed or broken; a suite that only adds coverage without ever catching a regression is not acceptable.",
+    "placeholders": [
+      "VALIDATION",
+      "COVERAGE_SCOPE"
+    ],
+    "weights": {
+      "test_coverage": 0.99
+    }
+  },
+  {
+    "name": "coverage_review",
+    "role": "review",
+    "description": "Review coverage gain against the threshold and reject tests that cannot detect regressions.",
+    "prompt": "Confirm coverage in [COVERAGE_SCOPE] increased by at least [COVERAGE_THRESHOLD] and that [STABLE_INTERFACE] is still covered; reject any new test that cannot detect at least one realistic regression—tests that only inflate coverage without proving behavioral correctness must be rewritten or removed.",
+    "placeholders": [
+      "COVERAGE_SCOPE",
+      "COVERAGE_THRESHOLD",
+      "STABLE_INTERFACE"
+    ],
+    "weights": {
+      "test_coverage": 0.97
+    }
   }
 ]
