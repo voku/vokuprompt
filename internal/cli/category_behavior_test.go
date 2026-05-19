@@ -82,7 +82,7 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 				"Do not invent missing context",
 				"[OUTPUT_FORMAT]",
 				"[MISSING_INPUTS]",
-				"the real [AUDIENCE]",
+				"the intended audience ([AUDIENCE])",
 				"Return the refined brief",
 			},
 			wantPlaceholders: []string{"TASK", "CONTEXT_TARGET", "SCOPE_ELEMENTS", "ASSUMPTIONS", "UNIT", "OUTPUT_FORMAT", "DONE_CONDITION", "MISSING_INPUTS", "AUDIENCE", "QUALITY_CRITERIA", "STABLE_INTERFACE"},
