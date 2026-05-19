@@ -1,0 +1,147 @@
+{
+  "name": "prompt-refinement-flow",
+  "original_weak_prompt": "adapt ideas from prompt-improver for vokuprompt",
+  "chosen_category": "prompt_refinement",
+  "optimize_command": "vokuprompt optimize --category prompt_refinement",
+  "returned_compiled_prompt": "Goal:\n[TASK]\n\nContext:\n[CONTEXT_TARGET]\n\nConstraints:\n- Do not invent missing context; keep unrelated [SCOPE_ELEMENTS] out of the rewritten brief, and label [ASSUMPTIONS] explicitly until they are confirmed.\n\nExecution:\n- Rewrite the request one [UNIT] at a time into an executable brief that states [OUTPUT_FORMAT] explicitly and continue until [DONE_CONDITION].\n\nAnalysis:\n- Before rewriting, identify [MISSING_INPUTS], the real [AUDIENCE], and the concrete [QUALITY_CRITERIA] that the final brief must make explicit in [CONTEXT_TARGET].\n\nReview:\n- Challenge the rewritten brief against [STABLE_INTERFACE], remove ungrounded assumptions, and ensure every item in [ASSUMPTIONS] is either confirmed or clearly labeled.\n\nOutput:\n- Return the refined brief in [OUTPUT_FORMAT] for [AUDIENCE], followed by explicit [ASSUMPTIONS], [MISSING_INPUTS], and [QUALITY_CRITERIA].",
+  "placeholder_manifest_excerpt": [
+    {
+      "name": "ASSUMPTIONS",
+      "required": true,
+      "node_types": [
+        "Constraints",
+        "Output",
+        "Review"
+      ],
+      "source_patterns": [
+        "refinement_output",
+        "refinement_review",
+        "refinement_scope"
+      ]
+    },
+    {
+      "name": "AUDIENCE",
+      "required": true,
+      "node_types": [
+        "Analysis",
+        "Output"
+      ],
+      "source_patterns": [
+        "refinement_analysis",
+        "refinement_output"
+      ]
+    },
+    {
+      "name": "CONTEXT_TARGET",
+      "required": true,
+      "node_types": [
+        "Analysis",
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done",
+        "refinement_analysis"
+      ]
+    },
+    {
+      "name": "DONE_CONDITION",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "refinement_loop"
+      ]
+    },
+    {
+      "name": "MISSING_INPUTS",
+      "required": true,
+      "node_types": [
+        "Analysis",
+        "Output"
+      ],
+      "source_patterns": [
+        "refinement_analysis",
+        "refinement_output"
+      ]
+    },
+    {
+      "name": "OUTPUT_FORMAT",
+      "required": true,
+      "node_types": [
+        "Execution",
+        "Output"
+      ],
+      "source_patterns": [
+        "refinement_loop",
+        "refinement_output"
+      ]
+    },
+    {
+      "name": "QUALITY_CRITERIA",
+      "required": true,
+      "node_types": [
+        "Analysis",
+        "Output"
+      ],
+      "source_patterns": [
+        "refinement_analysis",
+        "refinement_output"
+      ]
+    },
+    {
+      "name": "SCOPE_ELEMENTS",
+      "required": true,
+      "node_types": [
+        "Constraints"
+      ],
+      "source_patterns": [
+        "refinement_scope"
+      ]
+    },
+    {
+      "name": "STABLE_INTERFACE",
+      "required": true,
+      "node_types": [
+        "Review"
+      ],
+      "source_patterns": [
+        "refinement_review"
+      ]
+    },
+    {
+      "name": "TASK",
+      "required": true,
+      "node_types": [
+        "Framing"
+      ],
+      "source_patterns": [
+        "goal_context_constraints_done"
+      ]
+    },
+    {
+      "name": "UNIT",
+      "required": true,
+      "node_types": [
+        "Execution"
+      ],
+      "source_patterns": [
+        "refinement_loop"
+      ]
+    }
+  ],
+  "placeholder_resolution": {
+    "ASSUMPTIONS": "assume the feature should stay data-driven unless registry changes prove insufficient, assume the existing Go test suite is the primary validation path unless stronger repo-local proof is needed",
+    "AUDIENCE": "a coding agent implementing the change inside this repository",
+    "CONTEXT_TARGET": "categories.json, patterns.json, placeholders.json, skills/vokuprompt/SKILL.md, README.md, and the example/test fixtures that define the prompt contract",
+    "DONE_CONDITION": "the rewritten brief explicitly names assumptions, missing inputs, output shape, and quality criteria, and go test ./... -v still passes after the resulting change",
+    "MISSING_INPUTS": "the exact category name to add, the minimum placeholder set that keeps the brief deterministic, and the dogfood example that proves the category is useful in this repository",
+    "OUTPUT_FORMAT": "markdown with sections for Goal, Context, Constraints, Validation, Review, and Deliverables",
+    "QUALITY_CRITERIA": "deterministic prompt structure, explicit assumptions, explicit missing inputs, and runnable validation before commit",
+    "SCOPE_ELEMENTS": "the Go selection engine, unrelated categories, the bundle workflow, and memory-category behavior outside the new prompt-refinement addition",
+    "STABLE_INTERFACE": "the optimize JSON contract, deterministic category selection workflow, and existing category names and CLI flags other than the new addition",
+    "TASK": "Rewrite the task of adapting prompt-improver ideas for vokuprompt into an executable repo change brief that can be validated before commit.",
+    "UNIT": "one prompt-shaping pattern or supporting placeholder plus the matching docs and test updates"
+  },
+  "final_agent_handoff": "Goal:\nRewrite the task of adapting prompt-improver ideas for vokuprompt into an executable repo change brief that can be validated before commit.\n\nContext:\ncategories.json, patterns.json, placeholders.json, skills/vokuprompt/SKILL.md, README.md, and the example/test fixtures that define the prompt contract\n\nConstraints:\n- Do not invent missing context; keep unrelated the Go selection engine, unrelated categories, the bundle workflow, and memory-category behavior outside the new prompt-refinement addition out of the rewritten brief, and label assume the feature should stay data-driven unless registry changes prove insufficient, assume the existing Go test suite is the primary validation path unless stronger repo-local proof is needed explicitly until they are confirmed.\n\nExecution:\n- Rewrite the request one one prompt-shaping pattern or supporting placeholder plus the matching docs and test updates at a time into an executable brief that states markdown with sections for Goal, Context, Constraints, Validation, Review, and Deliverables explicitly and continue until the rewritten brief explicitly names assumptions, missing inputs, output shape, and quality criteria, and go test ./... -v still passes after the resulting change.\n\nAnalysis:\n- Before rewriting, identify the exact category name to add, the minimum placeholder set that keeps the brief deterministic, and the dogfood example that proves the category is useful in this repository, the real a coding agent implementing the change inside this repository, and the concrete deterministic prompt structure, explicit assumptions, explicit missing inputs, and runnable validation before commit that the final brief must make explicit in categories.json, patterns.json, placeholders.json, skills/vokuprompt/SKILL.md, README.md, and the example/test fixtures that define the prompt contract.\n\nReview:\n- Challenge the rewritten brief against the optimize JSON contract, deterministic category selection workflow, and existing category names and CLI flags other than the new addition, remove ungrounded assumptions, and ensure every item in assume the feature should stay data-driven unless registry changes prove insufficient, assume the existing Go test suite is the primary validation path unless stronger repo-local proof is needed is either confirmed or clearly labeled.\n\nOutput:\n- Return the refined brief in markdown with sections for Goal, Context, Constraints, Validation, Review, and Deliverables for a coding agent implementing the change inside this repository, followed by explicit assume the feature should stay data-driven unless registry changes prove insufficient, assume the existing Go test suite is the primary validation path unless stronger repo-local proof is needed, the exact category name to add, the minimum placeholder set that keeps the brief deterministic, and the dogfood example that proves the category is useful in this repository, and deterministic prompt structure, explicit assumptions, explicit missing inputs, and runnable validation before commit.\n\nTreat the selected category as fixed input chosen from the deterministic category registry.\n1. Use placeholder_manifest as the source of truth for which placeholders must be resolved now.\n2. Build the final executable prompt by resolving every required placeholder in compiled_prompt from repository facts and the current task context.\n3. Keep the selected category and compiled structure intact; do not silently rewrite the contract.\n4. If a required placeholder cannot be resolved safely, stop and ask for the missing input.\n5. After placeholder resolution, execute the final prompt.\n\nReturn:\n1. category confirmation\n2. placeholder resolution summary\n3. final executable prompt\n4. execution result"
+}

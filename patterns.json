@@ -303,6 +303,77 @@
     }
   },
   {
+    "name": "refinement_scope",
+    "role": "constraint",
+    "description": "Refine the brief without inventing context or broadening scope.",
+    "prompt": "Do not invent missing context; keep unrelated [SCOPE_ELEMENTS] out of the rewritten brief, and label [ASSUMPTIONS] explicitly until they are confirmed.",
+    "placeholders": [
+      "SCOPE_ELEMENTS",
+      "ASSUMPTIONS"
+    ],
+    "weights": {
+      "prompt_refinement": 0.99
+    }
+  },
+  {
+    "name": "refinement_loop",
+    "role": "execution",
+    "description": "Rewrite the request into an executable brief with explicit output shape and done condition.",
+    "prompt": "Rewrite the request one [UNIT] at a time into an executable brief that states [OUTPUT_FORMAT] explicitly and continue until [DONE_CONDITION].",
+    "placeholders": [
+      "UNIT",
+      "OUTPUT_FORMAT",
+      "DONE_CONDITION"
+    ],
+    "weights": {
+      "prompt_refinement": 0.99
+    }
+  },
+  {
+    "name": "refinement_analysis",
+    "role": "analysis",
+    "description": "Expose ambiguity, missing inputs, audience, and quality bar before rewriting the brief.",
+    "prompt": "Before rewriting, identify [MISSING_INPUTS], the real [AUDIENCE], and the concrete [QUALITY_CRITERIA] that the final brief must make explicit in [CONTEXT_TARGET].",
+    "placeholders": [
+      "MISSING_INPUTS",
+      "AUDIENCE",
+      "QUALITY_CRITERIA",
+      "CONTEXT_TARGET"
+    ],
+    "weights": {
+      "prompt_refinement": 0.99
+    }
+  },
+  {
+    "name": "refinement_review",
+    "role": "review",
+    "description": "Challenge the rewritten brief for ungrounded assumptions and drift.",
+    "prompt": "Challenge the rewritten brief against [STABLE_INTERFACE], remove ungrounded assumptions, and ensure every item in [ASSUMPTIONS] is either confirmed or clearly labeled.",
+    "placeholders": [
+      "STABLE_INTERFACE",
+      "ASSUMPTIONS"
+    ],
+    "weights": {
+      "prompt_refinement": 0.98
+    }
+  },
+  {
+    "name": "refinement_output",
+    "role": "output",
+    "description": "Require a structured refined brief plus explicit assumptions and missing inputs.",
+    "prompt": "Return the refined brief in [OUTPUT_FORMAT] for [AUDIENCE], followed by explicit [ASSUMPTIONS], [MISSING_INPUTS], and [QUALITY_CRITERIA].",
+    "placeholders": [
+      "OUTPUT_FORMAT",
+      "AUDIENCE",
+      "ASSUMPTIONS",
+      "MISSING_INPUTS",
+      "QUALITY_CRITERIA"
+    ],
+    "weights": {
+      "prompt_refinement": 0.99
+    }
+  },
+  {
     "name": "memory_capture_gate",
     "role": "done",
     "description": "Force durable memory capture when meaningful understanding emerged.",

@@ -208,6 +208,32 @@
     ]
   },
   {
+    "name": "prompt_refinement",
+    "description": "Turn a vague task request into a sharper executable brief with explicit assumptions, missing inputs, and output shape.",
+    "role_limits": {
+      "framing": 1,
+      "constraint": 1,
+      "execution": 1,
+      "analysis": 1,
+      "review": 1,
+      "output": 1
+    },
+    "required_patterns": [
+      "goal_context_constraints_done"
+    ],
+    "optional_patterns": [
+      "refinement_scope",
+      "refinement_loop",
+      "refinement_analysis",
+      "refinement_review",
+      "refinement_output"
+    ],
+    "focus": [
+      "brief sharpening",
+      "explicit assumptions"
+    ]
+  },
+  {
     "name": "code_discovery",
     "description": "Capture durable findings from non-trivial code discovery before stopping.",
     "role_limits": {
