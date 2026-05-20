@@ -76,6 +76,18 @@ func TestRealCategories_ProduceDistinctCompiledPrompts(t *testing.T) {
 			wantPlaceholders: []string{"CONTEXT_TARGET", "PASS_DEFINITIONS", "DONE_CONDITION", "VALIDATION", "STABLE_INTERFACE"},
 		},
 		{
+			category:     "prompt_refinement",
+			wantPatterns: []string{"refinement_scope", "refinement_loop", "refinement_analysis", "refinement_review", "refinement_output"},
+			wantPromptPieces: []string{
+				"Do not invent missing context",
+				"[OUTPUT_FORMAT]",
+				"[MISSING_INPUTS]",
+				"the intended audience ([AUDIENCE])",
+				"Return the refined brief",
+			},
+			wantPlaceholders: []string{"TASK", "CONTEXT_TARGET", "SCOPE_ELEMENTS", "ASSUMPTIONS", "UNIT", "OUTPUT_FORMAT", "DONE_CONDITION", "MISSING_INPUTS", "AUDIENCE", "QUALITY_CRITERIA", "STABLE_INTERFACE"},
+		},
+		{
 			category:     "code_discovery",
 			wantPatterns: []string{"privacy_redaction_gate", "evidence_first_memory", "crystallize_after_work", "memory_capture_gate", "writeback_required"},
 			wantPromptPieces: []string{
@@ -197,6 +209,7 @@ func TestExecuteCategories_RealConfigListsNewCategories(t *testing.T) {
 		"tests",
 		"test_coverage",
 		"operational_contract",
+		"prompt_refinement",
 		"code_discovery",
 		"implementation_learning",
 		"debugging_digest",

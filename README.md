@@ -116,6 +116,10 @@ Example output:
     {
       "name": "operational_contract",
       "description": "Execute as a multi-pass operational contract with missingness checks, verification loops, and explicit continuation."
+    },
+    {
+      "name": "prompt_refinement",
+      "description": "Turn a vague task request into a sharper executable brief with explicit assumptions, missing inputs, and output shape."
     }
   ]
 }
@@ -203,6 +207,7 @@ For the agent-oriented flow, see `skills/vokuprompt/SKILL.md`.
 go test ./... -v
 go run ./cmd/vokuprompt categories
 go run ./cmd/vokuprompt optimize --category performance
+go run ./cmd/vokuprompt optimize --category prompt_refinement
 go run ./cmd/vokuprompt optimize --category review --explain
 ```
 

@@ -128,6 +128,86 @@
     ]
   },
   {
+    "name": "OUTPUT_FORMAT",
+    "description": "The exact structure or delivery shape the refined brief or final result should use.",
+    "examples": [
+      "markdown with sections for Goal, Constraints, Validation, and Deliverables",
+      "JSON with fields for summary, risks, assumptions, and next_steps"
+    ],
+    "required": true,
+    "resolution": "State the concrete output structure the agent should produce so the rewritten brief is directly executable and reviewable.",
+    "expected_format": "one short sentence or noun phrase naming the required output shape",
+    "preferred_sources": [
+      "user_request",
+      "consumer_of_output",
+      "repository_conventions"
+    ]
+  },
+  {
+    "name": "AUDIENCE",
+    "description": "The person or system the refined brief is primarily written for.",
+    "examples": [
+      "a coding agent working inside this repository",
+      "a reviewer who must validate the resulting change"
+    ],
+    "required": true,
+    "resolution": "Name the real audience so the rewritten brief can use the right level of detail, constraints, and terminology.",
+    "expected_format": "a short noun phrase naming the target reader, executor, or consumer",
+    "preferred_sources": [
+      "user_request",
+      "execution_context",
+      "repository_workflow"
+    ]
+  },
+  {
+    "name": "QUALITY_CRITERIA",
+    "description": "The concrete standards that define whether the refined brief or resulting work is good enough.",
+    "examples": [
+      "minimal patch, explicit validation, and no unrelated behavior changes",
+      "reviewable output, grounded assumptions, and runnable verification"
+    ],
+    "required": true,
+    "resolution": "List the specific quality bar the refined brief must make explicit so success is measurable rather than implied.",
+    "expected_format": "a short comma-separated list of concrete standards or acceptance criteria",
+    "preferred_sources": [
+      "explicit_acceptance_criteria",
+      "repository_rules",
+      "validation_expectations"
+    ]
+  },
+  {
+    "name": "MISSING_INPUTS",
+    "description": "The unresolved questions or facts that must be surfaced before the brief can be executed safely.",
+    "examples": [
+      "the exact file or subsystem to change, required validation command, and whether docs must be updated",
+      "the target branch behavior, external constraints, and the expected output format"
+    ],
+    "required": true,
+    "resolution": "List the missing inputs that must be asked, inferred safely, or labeled as unresolved so the refined brief does not hide uncertainty.",
+    "expected_format": "a short comma-separated list of unresolved questions, facts, or decisions",
+    "preferred_sources": [
+      "user_request",
+      "current_repo_context",
+      "task_constraints"
+    ]
+  },
+  {
+    "name": "ASSUMPTIONS",
+    "description": "The assumptions the agent may need to operate under until they are confirmed or replaced with facts.",
+    "examples": [
+      "assume the change should stay within JSON registries unless code changes become necessary",
+      "assume the current Go test suite is the primary validation path unless the repo specifies more"
+    ],
+    "required": true,
+    "resolution": "State any provisional assumptions explicitly and label them clearly so reviewers can challenge them instead of inheriting hidden guesses.",
+    "expected_format": "a short comma-separated list of provisional assumptions, each phrased plainly",
+    "preferred_sources": [
+      "current_repo_context",
+      "task_scope",
+      "known_unknowns"
+    ]
+  },
+  {
     "name": "CODE_AREA",
     "description": "The concrete subsystem, code path, or file cluster whose new understanding should be captured durably.",
     "examples": [

@@ -62,6 +62,7 @@ func TestExampleFixtures_MatchOptimizeOutputAndResolveExecutablePrompt(t *testin
 		"bugfix-flow.json",
 		"operational-contract-flow.json",
 		"performance-flow.json",
+		"prompt-refinement-flow.json",
 		"refactor-flow.json",
 		"review-flow.json",
 		"test-coverage-flow.json",
