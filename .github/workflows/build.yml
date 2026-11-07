@@ -49,7 +49,7 @@ jobs:
           sha256sum dist/vokuprompt-linux-amd64.tar.gz > dist/vokuprompt-linux-amd64.tar.gz.sha256
 
       - name: Upload installable bundle
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: vokuprompt-linux-amd64
           path: |
