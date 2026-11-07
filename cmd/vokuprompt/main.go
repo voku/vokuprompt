@@ -14,7 +14,9 @@ func main() {
 
 func run(args []string, stdout, stderr io.Writer) int {
 	if len(args) < 1 {
-		fmt.Fprintln(stderr, "usage: vokuprompt <categories|optimize>")
+		if _, writeErr := fmt.Fprintln(stderr, "usage: vokuprompt <categories|optimize>"); writeErr != nil {
+			return 1
+		}
 		return 1
 	}
 
@@ -29,7 +31,9 @@ func run(args []string, stdout, stderr io.Writer) int {
 	}
 
 	if err != nil {
-		fmt.Fprintln(stderr, err)
+		if _, writeErr := fmt.Fprintln(stderr, err); writeErr != nil {
+			return 1
+		}
 		return 1
 	}
 	return 0
